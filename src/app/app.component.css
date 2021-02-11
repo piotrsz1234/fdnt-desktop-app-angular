@@ -1,0 +1,49 @@
+.uprow {
+    padding: 10px;
+    border-bottom: solid 1px #232323;
+    text-align: center;
+}
+
+.relative {
+    position: relative;
+}
+
+.titleSpan {
+    position: absolute;
+    bottom: 15%;
+    left: 4%;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.sidebar {
+    width: 12%;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    top:0;
+
+}
+
+.account-letter {
+    position: absolute;
+    bottom: 20%;
+    right: 1%;
+    color:white;
+    background-color: #f7d309;
+    padding: 5px 15px;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+.topbar {
+    background-color: #eeeeee;
+}
+
+.fixed-content {
+    border-left: 1px solid #232323;
+    margin-left: 5px;
+    position: absolute;
+    right: 0;
+    width: 88%;
+}

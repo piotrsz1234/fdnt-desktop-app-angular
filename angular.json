@@ -28,6 +28,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/angular-calendar/css/angular-calendar.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -91,6 +92,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/angular-calendar/css/angular-calendar.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -124,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "fndt-angular-app"
+  "defaultProject": "fndt-angular-app",
+  "cli": {
+    "analytics": "a4ec9175-6486-46e4-b571-65c9b47c1711"
+  }
 }
