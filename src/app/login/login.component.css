@@ -1,0 +1,10 @@
+.centerized {
+    position: absolute;
+    left: 25%;
+    top:25%;
+    right: auto;
+    bottom: auto;
+    width:50%;
+    height: auto;
+    text-align: center;
+}
