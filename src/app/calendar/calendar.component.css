@@ -1,0 +1,6 @@
+.margin {
+    margin: 10px;
+}
+#edit-event-container .modal {
+    min-height: 100%;
+}

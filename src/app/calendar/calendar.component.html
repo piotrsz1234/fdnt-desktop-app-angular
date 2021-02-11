@@ -1,0 +1,65 @@
+<mwl-calendar-month-view [viewDate]="viewDate" [events]="events">
+</mwl-calendar-month-view>
+<div class="row margin center">
+	<button class="btn green btn-primary">Add Event</button>
+</div>
+
+<div id="edit-event" class="modal modal-fixed-footer">
+	<p>Edycja Wydarzenia</p>
+	<div class="container" id="edit-event-container">
+		<div class="input-field">
+			<input placeholder="Nazwa wydarzenia" [value]="currentlyInEdit.Name" id="event_name" type="text" class="validate">
+			<label for="event_name">Nazwa wydarzenia</label>
+		</div>
+		<p>
+			<label>
+				<input  [value]="currentlyInEdit.IsForDedicatedGroup" type="checkbox" class="filled-in" checked="checked" id="for-group" />
+				<span>Czy dla sprecyzowanej grupy?</span>
+			</label>
+		</p>
+		<!--For who-->
+		<div class="row">
+			<div class="input-field col s6">
+				<input id="begin-date" type="text" class="datepicker" (click)="activateDamnThing(0)">
+				<label for="begin-date">Data początku</label>
+			</div>
+			<div class="input-field col s6">
+				<input id="begin-time" type="text" class="timepicker" (click)="activateDamnThing(1)">
+				<label for="begin-time">Czas początku</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="input-field col s6">
+				<input id="end-date" type="text" class="datepicker" (click)="activateDamnThing(0)">
+				<label for="end-date">Data końca</label>
+			</div>
+			<div class="input-field col s6">
+				<input id="end-time" type="text" class="timepicker" (click)="activateDamnThing(1)">
+				<label for="end-time">Czas końca</label>
+			</div>
+		</div>
+		<div class="input-field">
+			<input [value]="currentlyInEdit.Location" placeholder="Lokalizacja" id="location" type="text" class="validate">
+			<label for="location">Lokalizacja</label>
+		</div>
+		<div class="input-field col s12">
+			<select [value]="currentlyInEdit.TaskListID">
+				<option value="00000000-0000-0000-0000-000000000000" selected>Wybierz listę zadań</option>
+			</select>
+			<label>Lista zadań</label>
+		</div>
+
+		<div class="input-field col s12">
+			<select id="category" [value]="currentlyInEdit.Category">
+				<option value="00000000-0000-0000-0000-000000000000" disabled selected>Wybierz Kategorię</option>
+				<option *ngFor="let cat of categories;" value="{{cat.ID}}">{{cat.Name}}</option>
+			</select>
+			<label>Kategoria wydarzenia</label>
+		</div>
+
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="modal-close waves-effect waves-green btn-flat">Anuluj</a>
+		<a href="#!" class="modal-close waves-effect waves-green btn-flat">Zapisz Zmiany</a>
+	</div>
+</div>
