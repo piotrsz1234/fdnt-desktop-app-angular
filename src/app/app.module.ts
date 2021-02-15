@@ -12,10 +12,15 @@ import { NewsComponent } from './news/news.component'
 import { RouterModule } from '@angular/router'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TasklistsComponent } from './tasklists/tasklists.component';
+import { AngularFireModule } from '@angular/fire';
+import { firebaseConfig } from './firebaseConfig';
+import { AngularFireAuthModule } from "@angular/fire/auth";
 
 @NgModule({
   imports: [
     BrowserModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     CalendarModule.forRoot({

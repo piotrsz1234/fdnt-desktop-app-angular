@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { User } from './login/user';
+import { UserInfo } from './login/user';
 
 @Component({
 	selector: 'app-root',
@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 	title = 'FNDT Application for Web';
 
 	constructor(router: Router) {
-		let t = new User();
+		let t = new UserInfo ();
 		t.email = "piotr@dzielo.pl";
 		t.groups = ["Bialostocka"];
 		localStorage.setItem("user", JSON.stringify(t));
