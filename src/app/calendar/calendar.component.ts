@@ -7,6 +7,11 @@ import { apiUrl } from '../config'
 import { CombineUrls } from '../config'
 import { User } from '../login/user'
 import { APICalendarEvent, CategoryCalendarEvent } from './calendarEvent'
+import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours, } from 'date-fns';
+
+declare var openModal : Function;
+declare var setDate : Function;
+declare var setTime : Function;
 
 @Component({
 	selector: 'app-calendar',
@@ -15,6 +20,21 @@ import { APICalendarEvent, CategoryCalendarEvent } from './calendarEvent'
 })
 @Injectable()
 export class CalendarComponent implements OnInit {
+
+	colors: any = {
+		red: {
+		  primary: '#ad2121',
+		  secondary: '#FAE3E3',
+		},
+		blue: {
+		  primary: '#1e90ff',
+		  secondary: '#D1E8FF',
+		},
+		yellow: {
+		  primary: '#e3bc08',
+		  secondary: '#FDF1BA',
+		},
+	  };
 
 	view: CalendarView = CalendarView.Month;
 
@@ -30,16 +50,19 @@ export class CalendarComponent implements OnInit {
 
 	currentlyInEdit : APICalendarEvent = new APICalendarEvent();
 
+	activeDayIsOpen : boolean = false;
+
 	actions: CalendarEventAction[] = [
 		{
-			label: '<i class="fas fa-fw fa-pencil-alt"></i>',
+			label: '<i class="material-icons tiny">edit</i>',
 			a11yLabel: 'Edit',
 			onClick: ({ event }: { event: CalendarEvent }): void => {
+				openModal(0);
 				this.editEvent(event);
 			},
 		},
 		{
-			label: '<i class="fas fa-fw fa-trash-alt"></i>',
+			label: '<i class="material-icons tiny">delete</i>',
 			a11yLabel: 'Delete',
 			onClick: ({ event }: { event: CalendarEvent }): void => {
 				this.removeEvent(event);
@@ -47,44 +70,32 @@ export class CalendarComponent implements OnInit {
 		},
 	];
 
+	editModalHeader: string = "Edytuj wydarzenie";
+
 	constructor(private http: HttpClient) {
 	}
 
 	ngOnInit(): void {
 		this.fetchEvents();
-		document.addEventListener('DOMContentLoaded', function () {
-			var elems = document.querySelectorAll('.datepicker');
-			var instances = M.Datepicker.init(elems, {});
-			var elems = document.querySelectorAll('.modal');
-			var instances = M.Modal.init(elems);
-			var elems = document.querySelectorAll('.timepicker');
-			var instances = M.Timepicker.init(elems);
-		});
+		this.fetchCategories();
 	}
 
-	activateDamnThing(v: number): void {
-		if (v == 0)
-			setTimeout(this.fixOfDatePicker, 10);
-		else setTimeout(this.fixOfTimePicker, 10);
+	activateDamnThing(v: string): void {
+		setTimeout(this.fixPicker, 10, v);
 	}
 
-	fixOfDatePicker(): void {
-		let temps = document.getElementsByClassName("modal datepicker-modal open");
-		console.log(temps.length);
+	fixPicker(name : string): void {
+		let temps = document.getElementsByClassName("modal "+name+" open");
 		if (temps != null && temps.length > 0) {
 			let temp = temps.item(0);
-			if (temp != null) (temp as HTMLElement).style.setProperty("height", "100%");
+			if (temp != null) 
+			{
+				(temp as HTMLElement).style.setProperty("height", "100%");
+				(temp as HTMLElement).style.setProperty("width", "100%");
+			}
 		}
 	}
 
-	fixOfTimePicker(): void {
-		let temps = document.getElementsByClassName("modal timepicker-modal open");
-		console.log(temps.length);
-		if (temps != null && temps.length > 0) {
-			let temp = temps.item(0);
-			if (temp != null) (temp as HTMLElement).style.setProperty("height", "100%");
-		}
-	}
 
 	fetchEvents(): void {
 		let temp = localStorage.getItem("user");
@@ -99,9 +110,12 @@ export class CalendarComponent implements OnInit {
 			this.events = new Array<CalendarEvent>(observer.length);
 			for (let i = 0; i < observer.length; i++) {
 				this.events[i] = {
-					start: observer[i].WhenBegins,
-					end: observer[i].WhenEnds,
-					title: observer[i].Name,
+					start: new Date(observer[i].whenBegins),
+					end: new Date(observer[i].whenEnds),
+					title: observer[i].name,
+					color: this.colors.red,
+					actions: this.actions,
+        			draggable: true,
 				};
 			}
 		});
@@ -121,14 +135,39 @@ export class CalendarComponent implements OnInit {
 	}
 
 	editEvent(event: CalendarEvent): void {
-		let temp = this.apisEvents.find(x => (x.Name == event.title && x.WhenBegins == event.start && x.WhenEnds == event.end));
+		let temp = this.apisEvents.find(x => (x.name == event.title));
+		this.editModalHeader = "Edytuj wydarzenie";
 		if(temp != undefined)
 			this.currentlyInEdit = temp;
+		
+		setDate(this.currentlyInEdit.whenBegins, 0);
+		setTime(this.currentlyInEdit.whenBegins, 0);
+		setDate(this.currentlyInEdit.whenEnds, 1);
+		setTime(this.currentlyInEdit.whenEnds, 1);
 	}
 
 
 	removeEvent(event: CalendarEvent): void {
 
 	}
+
+	dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+		if (isSameMonth(date, this.viewDate)) {
+		  if (
+			(isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+			events.length === 0
+		  ) {
+			this.activeDayIsOpen = false;
+		  } else {
+			this.activeDayIsOpen = true;
+		  }
+		  this.viewDate = date;
+		}
+	}
+
+	addEvent() : void {
+		this.currentlyInEdit = new APICalendarEvent();
+	}
+
 
 }

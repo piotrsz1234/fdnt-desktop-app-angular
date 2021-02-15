@@ -13,3 +13,5 @@ export function CombineUrls(url1: string, url2: string): string
         else output += '/' + url2;
     return output;
 }
+
+export var emptyGuid = "00000000-0000-0000-0000-000000000000";

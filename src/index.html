@@ -10,7 +10,58 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-          
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var elems = document.querySelectorAll('.datepicker');
+      var instances = M.Datepicker.init(elems, {});
+      var elems = document.querySelectorAll('.modal');
+      var instances = M.Modal.init(elems);
+      var elems = document.querySelectorAll('.timepicker');
+      var instances = M.Timepicker.init(elems);
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems);
+    });
+
+    function openModal(id) {
+      var elems = document.querySelectorAll('.modal');
+      var instances = M.Modal.init(elems);
+      instances[id].open();
+    }
+
+    function closeModal(id) {
+      var elems = document.querySelectorAll('.modal');
+      var instance = M.Modal.getInstance(elems[id]);
+      instance.close();
+    }
+
+    function setDate(date, id) {
+      var elems = document.querySelectorAll('.datepicker');
+      var instances = M.Datepicker.getInstance(elems[id]);
+      console.log(instances != null);
+      console.log (new Date(date));
+      instances.setDate (new Date(date));
+      instances._finishSelection();
+    }
+
+    function setTime(dateS, id) {
+      var elems = document.querySelectorAll('.timepicker');
+      let date = new Date(dateS);
+      let t = date.getHours() > 12;
+      let hours = (t) ? date.getHours() - 12 : date.getHours();
+      let output = ((hours > 9) ? hours.toString() : "0" + hours);
+      output += ":";
+      output += (date.getMinutes() > 9) ? date.getMinutes().toString() : "0" + date.getMinutes();
+      output += " ";
+      output += (t) ? "PM" : "AM";
+      console.log(output);
+      let timeInstance = M.Timepicker.init(elems[id], {
+        defaultTime: output
+      });
+      timeInstance._updateTimeFromInput();
+      timeInstance.done();
+    }
+
+  </script>
 </head>
 <body style="overflow: hidden;">
   <app-root></app-root>

@@ -1,28 +1,28 @@
 export class APICalendarEvent {
-	ID : string = "";
-	Name : string = "";
-	ForWho : string = "";
-	WhenBegins : Date = new Date();
-	WhenEnds : Date = new Date();
-	Location : string = "";
-	TaskListID : string = "";
-	IsForDedicatedGroup : boolean = false;
-	Category : string = "";
-	CreatorEmail : string = "";
+	id : string = "00000000-0000-0000-0000-000000000000";
+	name : string = "";
+	forWho : string = "";
+	whenBegins : string = "";
+	whenEnds : string = "";
+	location : string = "";
+	taskListID : string = "";
+	isForDedicatedGroup : boolean = false;
+	category : string = "";
+	creatorEmail : string = "";
 
 }
 
 export class CategoryCalendarEvent {
-	ID : string = "";
-	Name : string = "";
-	Color : SerializableColor = new SerializableColor();
-	IsPersonal : boolean = false;
-	Owner : string = "";
+	iD : string = "";
+	name : string = "";
+	color : SerializableColor = new SerializableColor();
+	isPersonal : boolean = false;
+	owner : string = "";
 }
 
 export class SerializableColor {
-	R : number=0;
-	G : number=0;
-	B : number=0;
-	A : number=0;
+	r : number=0;
+	g : number=0;
+	b : number=0;
+	a : number=0;
 }

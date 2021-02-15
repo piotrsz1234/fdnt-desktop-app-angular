@@ -1,65 +1,78 @@
-<mwl-calendar-month-view [viewDate]="viewDate" [events]="events">
+<mwl-calendar-month-view 
+	[viewDate]="viewDate" 
+	[events]="events"
+	[activeDayIsOpen]="activeDayIsOpen"
+    (dayClicked)="dayClicked($event.day)">
 </mwl-calendar-month-view>
 <div class="row margin center">
-	<button class="btn green btn-primary">Add Event</button>
+	<a class="btn green btn-primary modal-trigger" (click)="addEvent()"
+		href="#edit-event">Add Event</a>
 </div>
 
-<div id="edit-event" class="modal modal-fixed-footer">
-	<p>Edycja Wydarzenia</p>
+<div id="edit-event" class="modal">
+	<p>{{editModalHeader}}</p>
 	<div class="container" id="edit-event-container">
 		<div class="input-field">
-			<input placeholder="Nazwa wydarzenia" [value]="currentlyInEdit.Name" id="event_name" type="text" class="validate">
+			<input placeholder="Nazwa wydarzenia" [value]="currentlyInEdit.name" id="event_name" type="text" class="validate">
 			<label for="event_name">Nazwa wydarzenia</label>
 		</div>
 		<p>
 			<label>
-				<input  [value]="currentlyInEdit.IsForDedicatedGroup" type="checkbox" class="filled-in" checked="checked" id="for-group" />
+				<input  [value]="currentlyInEdit.isForDedicatedGroup" type="checkbox" class="filled-in" checked="checked" id="for-group" />
 				<span>Czy dla sprecyzowanej grupy?</span>
 			</label>
 		</p>
 		<!--For who-->
 		<div class="row">
 			<div class="input-field col s6">
-				<input id="begin-date" type="text" class="datepicker" (click)="activateDamnThing(0)">
+			<input id="begin-date" type="text" class="datepicker" (click)="activateDamnThing('datepicker-modal')">
 				<label for="begin-date">Data początku</label>
 			</div>
 			<div class="input-field col s6">
-				<input id="begin-time" type="text" class="timepicker" (click)="activateDamnThing(1)">
+				<input id="begin-time" type="text" class="timepicker" (click)="activateDamnThing('timepicker-modal')">
 				<label for="begin-time">Czas początku</label>
 			</div>
 		</div>
 		<div class="row">
 			<div class="input-field col s6">
-				<input id="end-date" type="text" class="datepicker" (click)="activateDamnThing(0)">
+				<input id="end-date" type="text" class="datepicker" (click)="activateDamnThing('datepicker-modal')">
 				<label for="end-date">Data końca</label>
 			</div>
 			<div class="input-field col s6">
-				<input id="end-time" type="text" class="timepicker" (click)="activateDamnThing(1)">
+				<input id="end-time" type="text" class="timepicker" (click)="activateDamnThing('timepicker-modal')">
 				<label for="end-time">Czas końca</label>
 			</div>
 		</div>
 		<div class="input-field">
-			<input [value]="currentlyInEdit.Location" placeholder="Lokalizacja" id="location" type="text" class="validate">
+			<input [value]="currentlyInEdit.location" placeholder="Lokalizacja" id="location" type="text" class="validate">
 			<label for="location">Lokalizacja</label>
 		</div>
-		<div class="input-field col s12">
-			<select [value]="currentlyInEdit.TaskListID">
-				<option value="00000000-0000-0000-0000-000000000000" selected>Wybierz listę zadań</option>
+		<div class="input-field">
+			<select>
+				<option value="-1" selected>Wybierz listę zadań</option>
+				<option value="1">Testowanie</option>
 			</select>
 			<label>Lista zadań</label>
 		</div>
 
-		<div class="input-field col s12">
-			<select id="category" [value]="currentlyInEdit.Category">
-				<option value="00000000-0000-0000-0000-000000000000" disabled selected>Wybierz Kategorię</option>
-				<option *ngFor="let cat of categories;" value="{{cat.ID}}">{{cat.Name}}</option>
+		<div class="input-field">
+			<select id="category" [value]="currentlyInEdit.category">
+				<option value="0" disabled selected>Wybierz Kategorię</option>
+				<option *ngFor="let cat of categories; index as i;" value="{{i}}">{{cat.name}}</option>
 			</select>
 			<label>Kategoria wydarzenia</label>
 		</div>
-
 	</div>
 	<div class="modal-footer">
-		<a href="#!" class="modal-close waves-effect waves-green btn-flat">Anuluj</a>
+		<button class="waves-effect waves-green btn-flat" onclick="closeModal(0)">Anuluj</button>
 		<a href="#!" class="modal-close waves-effect waves-green btn-flat">Zapisz Zmiany</a>
+	</div>
+</div>
+
+<div id="edit-event" class="modal modal-fixed-footer">
+	<p>Czy na pewno chcesz usunąć to wydarzenie?</p>
+	<div class="modal-footer">
+		<a href="#!" class="modal-close waves-effect waves-red btn-flat">Nie</a>
+		<a href="#!" class="modal-close waves-effect waves-green btn-flat">Tak</a>
 	</div>
 </div>
