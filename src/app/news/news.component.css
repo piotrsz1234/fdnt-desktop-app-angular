@@ -1,0 +1,22 @@
+.post-field{
+    height: 350px;
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.post-field .post-title{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #ffffffa9;
+}
+
+.post-field .post-title p{
+    font-size: 16px;
+    font-weight: 700;
+    text-align: left;
+    margin-left: 40px;
+    padding-bottom: 30px;
+}
