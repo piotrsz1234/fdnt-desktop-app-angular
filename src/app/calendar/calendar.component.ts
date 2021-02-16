@@ -3,15 +3,19 @@ import { DateAdapter, CalendarView, CalendarEvent, CalendarEventAction } from 'a
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { apiUrl } from '../config'
+import { apiUrl, emptyGuid } from '../config'
 import { CombineUrls } from '../config'
-import { User } from '../login/user'
+import { UserInfo } from '../login/user'
 import { APICalendarEvent, CategoryCalendarEvent } from './calendarEvent'
 import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours, } from 'date-fns';
+import { TaskList } from '../tasklists/tasklist';
+import { ObjectUnsubscribedError } from 'rxjs';
 
 declare var openModal : Function;
 declare var setDate : Function;
 declare var setTime : Function;
+declare var selectValues : Function;
+declare var showToast : Function;
 
 @Component({
 	selector: 'app-calendar',
@@ -46,6 +50,8 @@ export class CalendarComponent implements OnInit {
 
 	apisEvents: APICalendarEvent[] = [];
 
+	taskLists : TaskList[] = [];
+
 	categories: CategoryCalendarEvent[] = [];
 
 	currentlyInEdit : APICalendarEvent = new APICalendarEvent();
@@ -71,6 +77,9 @@ export class CalendarComponent implements OnInit {
 	];
 
 	editModalHeader: string = "Edytuj wydarzenie";
+	editModalButtonText: string = "Zapisz zmiany";
+
+	tabs:string[] = [];
 
 	constructor(private http: HttpClient) {
 	}
@@ -78,6 +87,11 @@ export class CalendarComponent implements OnInit {
 	ngOnInit(): void {
 		this.fetchEvents();
 		this.fetchCategories();
+		this.fetchTaskLists();
+		let json = localStorage.getItem("tabs");
+		if(json == null) return;
+		let temp = JSON.parse(json);
+		if(temp != null) this.tabs = temp;
 	}
 
 	activateDamnThing(v: string): void {
@@ -99,7 +113,7 @@ export class CalendarComponent implements OnInit {
 
 	fetchEvents(): void {
 		let temp = localStorage.getItem("user");
-		let user = new User();
+		let user = new UserInfo();
 		if (temp != null)
 			user = JSON.parse(temp);
 		else return;
@@ -123,7 +137,7 @@ export class CalendarComponent implements OnInit {
 
 	fetchCategories() : void {
 		let temp = localStorage.getItem("user");
-		let user = new User();
+		let user = new UserInfo();
 		if (temp != null)
 			user = JSON.parse(temp);
 		else return;
@@ -134,9 +148,26 @@ export class CalendarComponent implements OnInit {
 		}, (error) => {});
 	}
 
+	fetchTaskLists() : void {
+		let temp = localStorage.getItem("user");
+		let user = new UserInfo();
+		if (temp != null)
+			user = JSON.parse(temp);
+		else return;
+		let params = new HttpParams().set("owner", user.email)
+		let tempEvents = this.http.get<TaskList[]>(CombineUrls(apiUrl, "/TaskList/tasklists"), { params });
+		tempEvents.subscribe((observer) => {
+			this.taskLists = [];
+			this.taskLists.push(new TaskList());
+			for(let i=0;i<observer.length;i++)
+				this.taskLists.push(observer[i]);
+		});
+	}
+
 	editEvent(event: CalendarEvent): void {
 		let temp = this.apisEvents.find(x => (x.name == event.title));
 		this.editModalHeader = "Edytuj wydarzenie";
+		this.editModalButtonText = "Zapisz zmiany";
 		if(temp != undefined)
 			this.currentlyInEdit = temp;
 		
@@ -167,6 +198,40 @@ export class CalendarComponent implements OnInit {
 
 	addEvent() : void {
 		this.currentlyInEdit = new APICalendarEvent();
+		this.editModalHeader = "Dodaj wydarzenie";
+		this.editModalButtonText = "Dodaj";
+	}
+
+	save() : void {
+		var select = document.getElementById("groups") as HTMLSelectElement;
+		var category = document.getElementById("category") as HTMLSelectElement;
+		var taskList = document.getElementById("tasklist") as HTMLSelectElement;
+		if(category == null || taskList == null) return;
+		let t = selectValues(select) as string[];
+		let forWho = "";
+		for(let k in t) {
+			forWho += this.tabs[(+k as number)] + "\n";
+		}
+		this.currentlyInEdit.forWho = forWho;
+		this.currentlyInEdit.category = this.categories[+category.value].iD;
+		this.currentlyInEdit.taskListID = this.taskLists[+taskList.value].iD;
+		console.log(JSON.stringify(this.currentlyInEdit));
+		let userJson = localStorage.getItem("user");
+		if(userJson == null) return;
+		let user = JSON.parse(userJson) as UserInfo;
+		if(user == undefined) return;
+		this.currentlyInEdit.creatorEmail = user.email;
+		if(this.currentlyInEdit.id == emptyGuid) {
+			this.http.post<string>(CombineUrls(apiUrl, "Calendar/events"), this.currentlyInEdit)
+			.subscribe(x => {
+				showToast("Udało się dodać wydarzenie. Jej!");
+			},
+			(error) =>{
+				
+			})
+		}else {
+
+		}
 	}
 
 

@@ -11,26 +11,20 @@ export class AppComponent implements OnInit {
 	title = 'FNDT Application for Web';
 
 	constructor(router: Router) {
-		let t = new UserInfo ();
-		t.email = "piotr@dzielo.pl";
-		t.groups = ["Bialostocka"];
-		localStorage.setItem("user", JSON.stringify(t));
 		router.events.subscribe((ev) => {
-			return;
-			/*if (ev instanceof NavigationEnd) {
+			if (ev instanceof NavigationEnd) {
 				let json = localStorage.getItem("user");
 				if (json == null || json == "") router.navigate(["login"]);
 				else {
-					let user: User = new User();
+					let user: UserInfo = new UserInfo();
 					user = JSON.parse(json);
 					if (user == null) router.navigate(["login"]);
 				}
-			}*/
+			}
 		});
 	}
 
 	onResize(event: any) {
-
 		let el = document.getElementById("navbar");
 		let content = document.getElementById("content");
 		if (el != null && content != null) {

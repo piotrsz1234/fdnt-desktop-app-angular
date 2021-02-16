@@ -18,11 +18,16 @@
 		</div>
 		<p>
 			<label>
-				<input  [value]="currentlyInEdit.isForDedicatedGroup" type="checkbox" class="filled-in" checked="checked" id="for-group" />
+				<input checked type="checkbox" class="filled-in" checked="checked" id="for-group" />
 				<span>Czy dla sprecyzowanej grupy?</span>
 			</label>
 		</p>
-		<!--For who-->
+		<div class="input-field">
+				<select multiple id="groups">
+					<option *ngFor="let item of tabs; index as i" [value]="i">{{item}}</option>
+				</select>
+				<label>Grupy</label>
+			  </div>
 		<div class="row">
 			<div class="input-field col s6">
 			<input id="begin-date" type="text" class="datepicker" (click)="activateDamnThing('datepicker-modal')">
@@ -48,24 +53,21 @@
 			<label for="location">Lokalizacja</label>
 		</div>
 		<div class="input-field">
-			<select>
-				<option value="-1" selected>Wybierz listę zadań</option>
-				<option value="1">Testowanie</option>
+			<select id="tasklist" class="browser-default">
+				<option *ngFor="let item of taskLists; index as i" [value]="i">{{item.name}}</option>
 			</select>
-			<label>Lista zadań</label>
+			
 		</div>
 
 		<div class="input-field">
-			<select id="category" [value]="currentlyInEdit.category">
-				<option value="0" disabled selected>Wybierz Kategorię</option>
-				<option *ngFor="let cat of categories; index as i;" value="{{i}}">{{cat.name}}</option>
+			<select id="category" class="browser-default">
+				<option *ngFor="let item of categories; index as i" [value]="i">{{item.name}}</option>
 			</select>
-			<label>Kategoria wydarzenia</label>
 		</div>
 	</div>
 	<div class="modal-footer">
 		<button class="waves-effect waves-green btn-flat" onclick="closeModal(0)">Anuluj</button>
-		<a href="#!" class="modal-close waves-effect waves-green btn-flat">Zapisz Zmiany</a>
+		<button class="waves-effect waves-green btn-flat" (click)="save()">{{editModalButtonText}}</button>
 	</div>
 </div>
 

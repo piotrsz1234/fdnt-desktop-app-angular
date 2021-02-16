@@ -62,6 +62,14 @@
       timeInstance.done();
     }
 
+    function selectValues(select) {
+      return M.FormSelect.getInstance(select).getSelectedValues();
+    }
+
+    function showToast(text) {
+      M.toast({html: text});
+    }
+
   </script>
 </head>
 <body style="overflow: hidden;">

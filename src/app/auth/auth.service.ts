@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Router } from "@angular/router";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFireDatabase } from '@angular/fire/database';
-import { User } from 'firebase';
+import firebase from "firebase/app";
 import { UserInfo } from '../login/user';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class AuthService {
-	user: User;
+	user: firebase.User = JSON.parse("{}");
 	constructor(public afAuth: AngularFireAuth, database: AngularFireDatabase, router: Router) {
 		this.afAuth.authState.subscribe(user => {
 			if (user) {
@@ -23,19 +23,24 @@ export class AuthService {
 				usersTabs.subscribe(x => {
 					let c =0;
 					for(let k in JSON.parse(JSON.stringify(x.payload.val()))){
-						console.log(k);
-						info.groups.push(k);
 						c++;
 					}
 					info.groups = new Array<string>(c);
 					c =0;
 					for(let k in JSON.parse(JSON.stringify(x.payload.val()))){
-						console.log(k);
 						info.groups[c] = k;
 						c++;
 					}
 					localStorage.setItem("user", JSON.stringify(info));
 					router.navigate(["calendar"]);
+				});
+				let tabs = database.object("tabs").snapshotChanges();
+				tabs.subscribe(x => {
+					let tab = new Array<string>();
+					for(let k in JSON.parse(JSON.stringify(x.payload.val()))){
+						tab.push(k);
+					}
+					localStorage.setItem("tabs", JSON.stringify(tab));
 				});
 				localStorage.setItem('firebaseUser', JSON.stringify(this.user));
 			} else {
