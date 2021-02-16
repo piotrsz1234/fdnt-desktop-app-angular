@@ -30,8 +30,9 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     }),
     RouterModule.forRoot([
       {path: "login", component: LoginComponent, outlet: 'main'},
-      {path: "calendar", component: CalendarComponent, outlet: 'main'},
       {path: "news", component: NewsComponent, outlet: 'main'},
+      {path: "calendar", component: CalendarComponent, outlet: 'main'},
+      {path: "tasklist", component: TasklistsComponent, outlet: 'main'},
       {path: "mail", component: MailComponent, outlet: 'main'},
       {path: "mail", component: MailSidebarComponent, outlet: 'sidebar'},
       {path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar'},

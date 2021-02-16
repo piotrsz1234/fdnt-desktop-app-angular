@@ -22,10 +22,10 @@
 	<div class="relative" (window:resize)="onResize($event)" >
 		<div class="sidebar" style="float:left;">
 			<ul>
-				<li><a [routerLink]="[{outlets:{main: ['news']}}]" href="/">Ogłoszenia</a></li>
-				<li><a [routerLink]="[{outlets:{main: ['calendar'], sidebar: ['calendar']}}]" href="/calendar">Kalendarz</a></li>
-				<li><a [routerLink]="[{outlets:{main: ['tasklist']}}]" href="/tasklist">Lista zadań</a></li>
-				<li class="selected"><a [routerLink]="[{outlets:{main: ['mail'], sidebar: ['mail']}}]" href="/mail">Poczta</a></li>
+				<li id="news"><a [routerLink]="[{outlets:{main: ['news']}}]" href="/">Ogłoszenia</a></li>
+				<li id="calendar"><a [routerLink]="[{outlets:{main: ['calendar'], sidebar: ['calendar']}}]" href="/calendar">Kalendarz</a></li>
+				<li id="tasklist"><a [routerLink]="[{outlets:{main: ['tasklist']}}]" href="/tasklist">Lista zadań</a></li>
+				<li id="mail"><a [routerLink]="[{outlets:{main: ['mail'], sidebar: ['mail']}}]" href="/mail">Poczta</a></li>
 			</ul>
 			<div class="line"></div>
 			<router-outlet name="sidebar"></router-outlet> 
