@@ -15,6 +15,9 @@ import { TasklistsComponent } from './tasklists/tasklists.component';
 import { MailComponent } from './mail/mail.component';
 import { MailSidebarComponent } from './mail-sidebar/mail-sidebar.component';
 import { CalendarSidebarComponent } from './calendar-sidebar/calendar-sidebar.component';
+import { firebaseConfig } from './firebaseConfig';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth/public_api';
 
 @NgModule({
   imports: [
@@ -34,7 +37,9 @@ import { CalendarSidebarComponent } from './calendar-sidebar/calendar-sidebar.co
       {path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar'},
       {path: '', redirectTo: '/calendar', pathMatch: 'full'}
     ]),
-    HttpClientModule
+    HttpClientModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule
   ],
   declarations: [
     AppComponent,
