@@ -47,3 +47,6 @@ Thumbs.db
 
 #post images
 src/assets/images/
+
+#firebase
+src/app/firebaseConfig.ts

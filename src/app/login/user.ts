@@ -1,4 +1,4 @@
-export class User {
+export class UserInfo {
 	email: string = "";
 	groups: string[] = [];
 
