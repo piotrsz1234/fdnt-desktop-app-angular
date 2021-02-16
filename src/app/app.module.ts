@@ -17,7 +17,7 @@ import { MailSidebarComponent } from './mail-sidebar/mail-sidebar.component';
 import { CalendarSidebarComponent } from './calendar-sidebar/calendar-sidebar.component';
 import { firebaseConfig } from './firebaseConfig';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth/public_api';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 @NgModule({
   imports: [
