@@ -1,11 +1,18 @@
 .mail-field{
     display: flex;
     align-items: center;
-    text-align: left;
     border-bottom-width: 0.5px;
     border-bottom-style: inset;
     margin-bottom: 0;
+}
+
+.mail-href-field{
+    display: flex;
+    align-items: center;
+    text-align: left;
     font-size: 14px;
+    color: #000;
+    width: 95%;
 }
 
 .chbox{
