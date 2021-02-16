@@ -1,0 +1,34 @@
+.mailbox-sidebar a{
+    text-align: left;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.mailbox-sidebar a.selected{
+    color: #8aafe0;
+    background-color: #8aafe07e;
+    border-bottom-right-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+.mailbox-sidebar a.selected p{
+    color: #527db6;
+}
+
+.mailbox-sidebar a.selected i{
+    color: #527db6;
+}
+
+.mailbox-sidebar a i{
+    
+    margin-left: 40px;
+    margin-right: 20px;
+    color: #00000070;
+}
+
+.mailbox-sidebar a p{
+    font-weight: 500;
+    color: #00000070;
+    margin: 5px 0;
+}
