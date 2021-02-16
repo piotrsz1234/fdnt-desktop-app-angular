@@ -13,11 +13,12 @@ import { RouterModule } from '@angular/router'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TasklistsComponent } from './tasklists/tasklists.component';
 import { MailComponent } from './mail/mail.component';
-import { MailSidebarComponent } from './mail-sidebar/mail-sidebar.component';
-import { CalendarSidebarComponent } from './calendar-sidebar/calendar-sidebar.component';
+import { MailSidebarComponent } from './mail/mail-sidebar/mail-sidebar.component';
+import { CalendarSidebarComponent } from './calendar/calendar-sidebar/calendar-sidebar.component';
 import { firebaseConfig } from './firebaseConfig';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { TasklistComponent } from './tasklists/tasklist/tasklist.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,10 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
       {path: "login", component: LoginComponent, outlet: 'main'},
       {path: "news", component: NewsComponent, outlet: 'main'},
       {path: "calendar", component: CalendarComponent, outlet: 'main'},
-      {path: "tasklist", component: TasklistsComponent, outlet: 'main'},
+      {path: "tasklist", component: TasklistsComponent, outlet: 'main', children: [
+        {path: ":id", component: TasklistComponent, outlet: 'main'}
+      ]},
+      {path: "id", component: TasklistComponent, outlet: 'main'},
       {path: "mail", component: MailComponent, outlet: 'main'},
       {path: "mail", component: MailSidebarComponent, outlet: 'sidebar'},
       {path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar'},
@@ -50,7 +54,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     TasklistsComponent,
     MailComponent,
     MailSidebarComponent,
-    CalendarSidebarComponent
+    CalendarSidebarComponent,
+    TasklistComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

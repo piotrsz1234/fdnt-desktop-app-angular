@@ -1,0 +1,83 @@
+h3{
+    margin-bottom: 30px;
+    font-size: 40px;
+    color: #23232393;
+    font-weight: 200;
+}
+
+.tasks-field{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.single-task-field{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 7px;
+    width: 90%;
+
+    border:  0.5px solid #eedea566;
+    border-left: 10px solid red;
+    border-radius: 5px;
+
+    color: #000;
+}
+
+.line{
+    width: 90%;
+    border-bottom: 1px solid #23232333;
+    margin-bottom: 50px;
+}
+
+.single-task-field .date{
+    width: 20%;
+}
+
+.single-task-field p{
+    width: 50%;
+    text-align: left;
+    font-weight: 500;
+}
+
+.participants{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.more-options{
+    width: 10%;
+}
+
+.single-task-field:hover{
+    box-shadow: 2px 5px 10px#23232333;
+    background-color: #dbd5c011;
+}
+
+.task-details-field{
+    display: flex;
+    width: 85%;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.task-details-field .participants-list{
+    width: 30%;
+    font-size: 13px;
+    color: #23232393;
+}
+
+.task-details-field .participants-list li{
+    font-weight: 500;
+}
+
+.task-details-field .description-field{
+    width: 60%;
+    font-size: 13px;
+    text-align: left;
+
+}
