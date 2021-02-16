@@ -1,21 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { DateAdapter, CalendarView, CalendarEvent, CalendarEventAction } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http'
+import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { apiUrl, emptyGuid } from '../config'
 import { CombineUrls } from '../config'
 import { UserInfo } from '../login/user'
-import { APICalendarEvent, CategoryCalendarEvent } from './calendarEvent'
+import { APICalendarEvent, CategoryCalendarEvent, CalculateColorForHex, CalculateSecondaryColorForHex, AreTheyTheSame } from './calendarEvent'
 import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours, } from 'date-fns';
 import { TaskList } from '../tasklists/tasklist';
-import { ObjectUnsubscribedError } from 'rxjs';
 
-declare var openModal : Function;
-declare var setDate : Function;
-declare var setTime : Function;
-declare var selectValues : Function;
-declare var showToast : Function;
+declare let openModal : Function;
+declare let setDate : Function;
+declare let setTime : Function;
+declare let selectValues : Function;
+declare let showToast : Function;
+declare let closeModal : Function;
+declare let setValues : Function;
 
 @Component({
 	selector: 'app-calendar',
@@ -25,24 +26,11 @@ declare var showToast : Function;
 @Injectable()
 export class CalendarComponent implements OnInit {
 
-	colors: any = {
-		red: {
-		  primary: '#ad2121',
-		  secondary: '#FAE3E3',
-		},
-		blue: {
-		  primary: '#1e90ff',
-		  secondary: '#D1E8FF',
-		},
-		yellow: {
-		  primary: '#e3bc08',
-		  secondary: '#FDF1BA',
-		},
-	  };
-
 	view: CalendarView = CalendarView.Month;
 
 	CalendarView = CalendarView;
+
+	selectedTabs : string[] = [];
 
 	viewDate: Date = new Date();
 
@@ -84,7 +72,7 @@ export class CalendarComponent implements OnInit {
 	constructor(private http: HttpClient) {
 	}
 
-	ngOnInit(): void {
+	async ngOnInit() {
 		this.fetchEvents();
 		this.fetchCategories();
 		this.fetchTaskLists();
@@ -110,6 +98,19 @@ export class CalendarComponent implements OnInit {
 		}
 	}
 
+	setCategory(id:string) {
+		let params = new HttpParams().set("categoryId", id);
+		let o = new CategoryCalendarEvent();
+		let output = this.http.get<CategoryCalendarEvent>(CombineUrls(apiUrl, "/Calendar/category"), {params});
+		output.subscribe(x => {
+			for(let i=0;i<this.events.length;i++)
+				if(this.apisEvents[i].category == x.id)
+					this.events[i].color = { 
+						primary: CalculateColorForHex(x.color),
+						secondary: CalculateSecondaryColorForHex(x.color)
+					};
+		});	
+	}
 
 	fetchEvents(): void {
 		let temp = localStorage.getItem("user");
@@ -127,10 +128,14 @@ export class CalendarComponent implements OnInit {
 					start: new Date(observer[i].whenBegins),
 					end: new Date(observer[i].whenEnds),
 					title: observer[i].name,
-					color: this.colors.red,
+					color:{ 
+						primary: "",
+						secondary: ""
+					},
 					actions: this.actions,
         			draggable: true,
 				};
+				this.setCategory(this.apisEvents[i].category);
 			}
 		});
 	}
@@ -165,21 +170,74 @@ export class CalendarComponent implements OnInit {
 	}
 
 	editEvent(event: CalendarEvent): void {
-		let temp = this.apisEvents.find(x => (x.name == event.title));
+		let temp = this.apisEvents.find(x => AreTheyTheSame(x, event));
+		console.log(temp);
 		this.editModalHeader = "Edytuj wydarzenie";
 		this.editModalButtonText = "Zapisz zmiany";
 		if(temp != undefined)
 			this.currentlyInEdit = temp;
-		
 		setDate(this.currentlyInEdit.whenBegins, 0);
 		setTime(this.currentlyInEdit.whenBegins, 0);
 		setDate(this.currentlyInEdit.whenEnds, 1);
 		setTime(this.currentlyInEdit.whenEnds, 1);
+		let selected = this.currentlyInEdit.forWho.split('\n');
+		if(selected[selected.length-1] == "") selected.pop();
+		this.setValuesInSelect(selected);
 	}
 
+	setValuesInSelect(array:string[]) {
+		let children = document.getElementsByClassName("dropdown-content select-dropdown multiple-select-dropdown")[0].childNodes;
+		for(let i=0;i<children.length;i++)
+		{
+		  for(let j=0;j<array.length;j++) {
+			
+			if(children[i].innerHTML.includes(array[j]))
+			  children[i].childNodes[0].childNodes[0].firstChild.click();
+		  }
+		}
+	  }
+
+	replace(inWHat:string, what:string, forWhat:string) : string {
+		let output = "";
+		for(let i=0;i<inWHat.length - what.length;i++) {
+			if(inWHat.substr(i, what.length) == what)
+			{
+					output += forWhat;
+					i+=what.length-1;
+			} else output += inWHat[i];
+		}
+		return output;
+	}
 
 	removeEvent(event: CalendarEvent): void {
+		let temp = this.apisEvents.find(x => AreTheyTheSame(x, event));
+		 this.currentlyInEdit = temp as APICalendarEvent;
+		openModal(-1);
+	}
 
+	deleteEvent() : void {
+		let json = localStorage.getItem("user") as string;
+		let info = JSON.parse(json) as UserInfo;
+		let data = {
+			"calendarEventID" : this.currentlyInEdit.id,
+			"owner" : info.email
+		}
+		const options = {
+			headers: new HttpHeaders({
+			  'Content-Type': 'application/json',
+			}),
+			body: data,
+		  };
+		this.http.delete(CombineUrls(apiUrl, "/Calendar/events"), options)
+		.subscribe(x => {
+			showToast("Udalo się usunac");
+			this.fetchEvents();
+		},
+		(err : HttpErrorResponse) => {
+			if(err.status == 403)
+				showToast("Nie masz uprawnień, aby go usunać!");
+			else showToast("Z jakiegoś powodu nie możesz usunać!")
+		});
 	}
 
 	dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
@@ -202,10 +260,24 @@ export class CalendarComponent implements OnInit {
 		this.editModalButtonText = "Dodaj";
 	}
 
-	save() : void {
-		var select = document.getElementById("groups") as HTMLSelectElement;
-		var category = document.getElementById("category") as HTMLSelectElement;
-		var taskList = document.getElementById("tasklist") as HTMLSelectElement;
+	getDates() : void {
+		let bDate = document.getElementById("begin-date") as HTMLInputElement;
+		let bTime = document.getElementById("begin-time") as HTMLInputElement;
+		let eDate = document.getElementById("end-date") as HTMLInputElement;
+		let eTime = document.getElementById("end-time") as HTMLInputElement;
+		let bOutputDate = new Date(bDate.value + " " + bTime.value);
+		let eOutputDate = new Date(eDate.value + " " + eTime.value);
+		let bS = JSON.stringify(bOutputDate);
+		this.currentlyInEdit.whenBegins = bS.substr(1, bS.length-2);
+		let eS = JSON.stringify(eOutputDate);
+		this.currentlyInEdit.whenEnds = eS.substr(1, eS.length-2);
+	}
+
+	readDataFromInputs() : void {
+		this.getDates();
+		let select = document.getElementById("groups") as HTMLSelectElement;
+		let category = document.getElementById("category") as HTMLSelectElement;
+		let taskList = document.getElementById("tasklist") as HTMLSelectElement;
 		if(category == null || taskList == null) return;
 		let t = selectValues(select) as string[];
 		let forWho = "";
@@ -213,26 +285,51 @@ export class CalendarComponent implements OnInit {
 			forWho += this.tabs[(+k as number)] + "\n";
 		}
 		this.currentlyInEdit.forWho = forWho;
-		this.currentlyInEdit.category = this.categories[+category.value].iD;
-		this.currentlyInEdit.taskListID = this.taskLists[+taskList.value].iD;
+		this.currentlyInEdit.category = this.categories[+category.value].id;
+		this.currentlyInEdit.taskListID = this.taskLists[+taskList.value].id;
 		console.log(JSON.stringify(this.currentlyInEdit));
 		let userJson = localStorage.getItem("user");
 		if(userJson == null) return;
 		let user = JSON.parse(userJson) as UserInfo;
-		if(user == undefined) return;
+		if(user == null) return;
 		this.currentlyInEdit.creatorEmail = user.email;
+		this.currentlyInEdit.name = (document.getElementById("event-name") as HTMLInputElement).value;
+		this.currentlyInEdit.location = (document.getElementById("event-location") as HTMLInputElement).value;
+	}
+
+	save() : void {
+		this.readDataFromInputs();
 		if(this.currentlyInEdit.id == emptyGuid) {
 			this.http.post<string>(CombineUrls(apiUrl, "Calendar/events"), this.currentlyInEdit)
 			.subscribe(x => {
 				showToast("Udało się dodać wydarzenie. Jej!");
+				closeModal(0);
+				this.fetchEvents();
 			},
 			(error) =>{
-				
+				console.log(error);
+				showToast("Nie udało się dodać!");
 			})
 		}else {
-
+			this.http.patch<string>(CombineUrls(apiUrl, "Calendar/events"), this.currentlyInEdit)
+			.subscribe(x => {
+				showToast("Udało się zedytować wydarzenie. Jej!");
+				closeModal(0);
+				this.fetchEvents();
+			},
+			(error) =>{
+				console.log(error);
+				showToast("Nie udało się dodać!");
+			})
 		}
 	}
 
+	changeMonth(t : number) : void {
+		this.viewDate.setMonth(this.viewDate.getMonth() + t);
+	}
+
+	closeOpenMonthViewDay() {
+		this.activeDayIsOpen = false;
+	}
 
 }

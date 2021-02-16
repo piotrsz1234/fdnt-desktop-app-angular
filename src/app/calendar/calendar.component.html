@@ -2,18 +2,31 @@
 	[viewDate]="viewDate" 
 	[events]="events"
 	[activeDayIsOpen]="activeDayIsOpen"
-    (dayClicked)="dayClicked($event.day)">
+	(dayClicked)="dayClicked($event.day)">
 </mwl-calendar-month-view>
 <div class="row margin center">
+	<div class="left">
+		<button  mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()" class="btn grey btn-primary">Poprzedni miesiąc</button>
+	</div>
 	<a class="btn green btn-primary modal-trigger" (click)="addEvent()"
 		href="#edit-event">Add Event</a>
+	<div class="right">
+		<button
+		mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()" class="btn grey btn-primary">Następny miesiąc</button>
+	</div>
 </div>
 
 <div id="edit-event" class="modal">
 	<p>{{editModalHeader}}</p>
 	<div class="container" id="edit-event-container">
 		<div class="input-field">
-			<input placeholder="Nazwa wydarzenia" [value]="currentlyInEdit.name" id="event_name" type="text" class="validate">
+			<input (value)="currentlyInEdit.name" [value]="currentlyInEdit.name" placeholder="Nazwa wydarzenia" id="event-name" type="text" class="validate">
 			<label for="event_name">Nazwa wydarzenia</label>
 		</div>
 		<p>
@@ -24,7 +37,7 @@
 		</p>
 		<div class="input-field">
 				<select multiple id="groups">
-					<option *ngFor="let item of tabs; index as i" [value]="i">{{item}}</option>
+					<option *ngFor="let item of tabs; index as i" [value]="i" >{{item}}</option>
 				</select>
 				<label>Grupy</label>
 			  </div>
@@ -49,18 +62,18 @@
 			</div>
 		</div>
 		<div class="input-field">
-			<input [value]="currentlyInEdit.location" placeholder="Lokalizacja" id="location" type="text" class="validate">
+			<input (value)="currentlyInEdit.location" [value]="currentlyInEdit.location" placeholder="Lokalizacja" id="event-location" type="text" class="validate">
 			<label for="location">Lokalizacja</label>
 		</div>
 		<div class="input-field">
-			<select id="tasklist" class="browser-default">
+			<select id="tasklist" class="browser-default" [value]="taskLists.indexOf(currentlyInEdit.taskListID)" >
 				<option *ngFor="let item of taskLists; index as i" [value]="i">{{item.name}}</option>
 			</select>
 			
 		</div>
 
 		<div class="input-field">
-			<select id="category" class="browser-default">
+			<select id="category" class="browser-default" [value]="categories.indexOf(currentlyInEdit.category)">
 				<option *ngFor="let item of categories; index as i" [value]="i">{{item.name}}</option>
 			</select>
 		</div>
@@ -71,10 +84,10 @@
 	</div>
 </div>
 
-<div id="edit-event" class="modal modal-fixed-footer">
+<div id="remove-event" class="modal modal-fixed-footer">
 	<p>Czy na pewno chcesz usunąć to wydarzenie?</p>
 	<div class="modal-footer">
-		<a href="#!" class="modal-close waves-effect waves-red btn-flat">Nie</a>
-		<a href="#!" class="modal-close waves-effect waves-green btn-flat">Tak</a>
+		<button onclick="closeModal(5)" class="modal-close waves-effect waves-red btn-flat">Nie</button>
+		<button (click)="deleteEvent()" class="modal-close waves-effect waves-green btn-flat">Tak</button>
 	</div>
 </div>

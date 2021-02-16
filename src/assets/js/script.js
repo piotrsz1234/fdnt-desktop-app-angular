@@ -30,8 +30,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function openModal(id) {
     var elems = document.querySelectorAll('.modal');
+    console.log(elems.length);
     var instances = M.Modal.init(elems);
-    instances[id].open();
+    if(id == -1) instances[instances.length-1].open();
+    else
+      instances[id].open();
   }
 
   function closeModal(id) {
@@ -43,8 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function setDate(date, id) {
     var elems = document.querySelectorAll('.datepicker');
     var instances = M.Datepicker.getInstance(elems[id]);
-    console.log(instances != null);
-    console.log (new Date(date));
     instances.setDate (new Date(date));
     instances._finishSelection();
   }
