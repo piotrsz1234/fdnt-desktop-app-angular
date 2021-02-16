@@ -29,10 +29,10 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
       useFactory: adapterFactory,
     }),
     RouterModule.forRoot([
-      {path: "login", component: LoginComponent},
-      {path: "calendar", component: CalendarComponent},
-      {path: "news", component: NewsComponent},
-      {path: "mail", component: MailComponent},
+      {path: "login", component: LoginComponent, outlet: 'main'},
+      {path: "calendar", component: CalendarComponent, outlet: 'main'},
+      {path: "news", component: NewsComponent, outlet: 'main'},
+      {path: "mail", component: MailComponent, outlet: 'main'},
       {path: "mail", component: MailSidebarComponent, outlet: 'sidebar'},
       {path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar'},
       {path: '', redirectTo: '/calendar', pathMatch: 'full'}
