@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TasklistsComponent } from './tasklists/tasklists.component';
 import { MailComponent } from './mail/mail.component';
 import { MailSidebarComponent } from './mail-sidebar/mail-sidebar.component';
+import { CalendarSidebarComponent } from './calendar-sidebar/calendar-sidebar.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { MailSidebarComponent } from './mail-sidebar/mail-sidebar.component';
       {path: "news", component: NewsComponent},
       {path: "mail", component: MailComponent},
       {path: "mail", component: MailSidebarComponent, outlet: 'sidebar'},
+      {path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar'},
       {path: '', redirectTo: '/calendar', pathMatch: 'full'}
     ]),
     HttpClientModule
@@ -41,7 +43,8 @@ import { MailSidebarComponent } from './mail-sidebar/mail-sidebar.component';
     NewsComponent,
     TasklistsComponent,
     MailComponent,
-    MailSidebarComponent
+    MailSidebarComponent,
+    CalendarSidebarComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

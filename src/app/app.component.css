@@ -42,6 +42,12 @@
     font-size: 16px;
 }
 
+.line{
+    height: 0;
+    margin-right: 10px;
+    border: 0.5px solid #23232323;
+}
+
 .account-letter {
     position: absolute;
     bottom: 20%;

@@ -23,10 +23,11 @@
 		<div class="sidebar" style="float:left;">
 			<ul>
 				<li><a href="/">Ogłoszenia</a></li>
-				<li><a href="/calendar">Kalendarz</a></li>
+				<li><a [routerLink]="[{outlets:{sidebar: ['calendar']}}]" href="/calendar">Kalendarz</a></li>
 				<li><a href="/tasklist">Lista zadań</a></li>
-				<li class="selected"><a href="/mail">Poczta</a></li>
+				<li class="selected"><a [routerLink]="[{outlets:{sidebar: ['mail']}}]" href="/mail">Poczta</a></li>
 			</ul>
+			<div class="line"></div>
 			<router-outlet name="sidebar"></router-outlet> 
 		</div>
 		<div class="fixed-content" style="float:left; overflow-y: auto; text-align: center" id="content">
