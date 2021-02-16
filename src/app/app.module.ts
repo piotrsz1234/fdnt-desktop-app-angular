@@ -12,15 +12,12 @@ import { NewsComponent } from './news/news.component'
 import { RouterModule } from '@angular/router'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TasklistsComponent } from './tasklists/tasklists.component';
-import { AngularFireModule } from '@angular/fire';
-import { firebaseConfig } from './firebaseConfig';
-import { AngularFireAuthModule } from "@angular/fire/auth";
+import { MailComponent } from './mail/mail.component';
+import { MailSidebarComponent } from './mail-sidebar/mail-sidebar.component';
 
 @NgModule({
   imports: [
     BrowserModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     CalendarModule.forRoot({
@@ -31,6 +28,8 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
       {path: "login", component: LoginComponent},
       {path: "calendar", component: CalendarComponent},
       {path: "news", component: NewsComponent},
+      {path: "mail", component: MailComponent},
+      {path: "mail", component: MailSidebarComponent, outlet: 'sidebar'},
       {path: '', redirectTo: '/calendar', pathMatch: 'full'}
     ]),
     HttpClientModule
@@ -40,7 +39,9 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
     CalendarComponent,
     LoginComponent,
     NewsComponent,
-    TasklistsComponent
+    TasklistsComponent,
+    MailComponent,
+    MailSidebarComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
