@@ -191,11 +191,11 @@ export class CalendarComponent implements OnInit {
 		{
 		  for(let j=0;j<array.length;j++) {
 			
-			if(children[i].innerHTML.includes(array[j]))
-			  children[i].childNodes[0].childNodes[0].firstChild.click();
+			if((children[i] as HTMLElement).innerHTML.includes(array[j]))
+			  (children[i].childNodes[0].childNodes[0].childNodes[0] as HTMLElement).click();
 		  }
 		}
-	  }
+	}
 
 	replace(inWHat:string, what:string, forWhat:string) : string {
 		let output = "";
@@ -213,6 +213,18 @@ export class CalendarComponent implements OnInit {
 		let temp = this.apisEvents.find(x => AreTheyTheSame(x, event));
 		 this.currentlyInEdit = temp as APICalendarEvent;
 		openModal(-1);
+	}
+
+	indexOfTaskList(array : Array<TaskList>, id : string) : number {
+		for(let i =0;i<array.length;i++)
+			if(array[i].id == id) return i;
+		return -1;
+	}
+
+	indexOfCategory(array : Array<CategoryCalendarEvent>, id : string) : number {
+		for(let i =0;i<array.length;i++)
+			if(array[i].id == id) return i;
+		return -1;
 	}
 
 	deleteEvent() : void {

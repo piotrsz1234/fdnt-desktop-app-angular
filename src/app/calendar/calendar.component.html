@@ -66,14 +66,14 @@
 			<label for="location">Lokalizacja</label>
 		</div>
 		<div class="input-field">
-			<select id="tasklist" class="browser-default" [value]="taskLists.indexOf(currentlyInEdit.taskListID)" >
+			<select id="tasklist" class="browser-default" [value]="indexOfTaskList(taskLists, currentlyInEdit.taskListID)" >
 				<option *ngFor="let item of taskLists; index as i" [value]="i">{{item.name}}</option>
 			</select>
 			
 		</div>
 
 		<div class="input-field">
-			<select id="category" class="browser-default" [value]="categories.indexOf(currentlyInEdit.category)">
+			<select id="category" class="browser-default" [value]="indexOfCategory(categories, currentlyInEdit.category)">
 				<option *ngFor="let item of categories; index as i" [value]="i">{{item.name}}</option>
 			</select>
 		</div>
