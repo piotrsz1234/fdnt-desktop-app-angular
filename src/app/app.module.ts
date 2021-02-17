@@ -34,13 +34,13 @@ import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
       {path: "login", component: LoginComponent, outlet: 'main'},
       {path: "news", component: NewsComponent, outlet: 'main'},
       {path: "calendar", component: CalendarComponent, outlet: 'main'},
+      {path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar'},
       {path: "tasklist", component: TasklistsComponent, outlet: 'main', children: [
         {path: ":id", component: TasklistComponent, outlet: 'main'}
       ]},
       {path: "id", component: TasklistComponent, outlet: 'main'},
       {path: "mail", component: MailComponent, outlet: 'main'},
       {path: "mail", component: MailSidebarComponent, outlet: 'sidebar'},
-      {path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar'},
       {path: '', redirectTo: '/calendar', pathMatch: 'full'}
     ]),
     HttpClientModule,
