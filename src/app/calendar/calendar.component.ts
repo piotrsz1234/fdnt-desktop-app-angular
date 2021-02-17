@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { DateAdapter, CalendarView, CalendarEvent, CalendarEventAction } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { CalendarView, CalendarEvent, CalendarEventAction } from 'angular-calendar';
 import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { apiUrl, emptyGuid } from '../config'
 import { CombineUrls } from '../config'
 import { UserInfo } from '../login/user'
 import { APICalendarEvent, CategoryCalendarEvent, CalculateColorForHex, CalculateSecondaryColorForHex, AreTheyTheSame } from './calendarEvent'
-import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours, } from 'date-fns';
+import { isSameDay, isSameMonth } from 'date-fns';
 import { TaskList } from '../tasklists/tasklist';
 
 declare let openModal : Function;
@@ -16,7 +15,6 @@ declare let setTime : Function;
 declare let selectValues : Function;
 declare let showToast : Function;
 declare let closeModal : Function;
-declare let setValues : Function;
 
 @Component({
 	selector: 'app-calendar',
@@ -342,6 +340,15 @@ export class CalendarComponent implements OnInit {
 
 	closeOpenMonthViewDay() {
 		this.activeDayIsOpen = false;
+	}
+
+	changedView(v : string){
+		if(v == "0")
+			this.view = CalendarView.Day;
+		if(v == "1")
+			this.view = CalendarView.Week;
+		if(v == "2")
+			this.view = CalendarView.Month;
 	}
 
 }
