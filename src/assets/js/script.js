@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('DOMSubtreeModified', function () {
       checkSelectedPage()
     });
+
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, {accordion: false});
   });
 
   function checkSelectedPage(){

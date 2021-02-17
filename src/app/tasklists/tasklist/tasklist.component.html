@@ -1,6 +1,6 @@
 <h3>lista zadań do wykonania na Dzień Papieski</h3>
 
-<div class="tasks-field collapsible">
+<div class="tasks-field">
     <div class="line"></div>
 
     <div>szczegóły:
@@ -10,71 +10,155 @@
     </div>
     <div class="line"></div>
 
-    <div class="single-task-field collapsible-header">
-        <div class="date">13.01.2021 r.</div>
-        <p>Zadnie nr 1</p>
-        <div class="participants">
-            <p>osoby: </p>
-            <p>0</p>
-            <i class = "material-icons">add_circle_outline</i>
-        </div>
-        <i class = "more-options material-icons">more_vert</i>
-    </div>
+    <ul class="collapsible">
+        <li>
+            <div class="collapsible-header single-task-field">
+                <svg class="radial-progress" viewBox="0 0 80 80">
+                    <circle class="incomplete" cx="40" cy="40" r="35"></circle>
+                    <circle class="complete" cx="40" cy="40" r="35" style="stroke-dashoffset: calc(220 - 82*220/100);"></circle>
+                    <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">82%</text>
+                </svg>
 
-    <div class="task-details-field collapsible-body">
-        <div class="description-field">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
-            enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-            in reprehenderit in voluptate velit esse cillum dolore eu fugiat 
-            nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-            sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </div>
+                <div class="date">13.01.2021 r.</div>
+                <p>Zadnie nr 1</p>
+                <div class="participants">
+                    <p>osoby: </p>
+                    <p>0</p>
+                    <i class = "material-icons">add_circle_outline</i>
+                </div>
+                <i class = "more-options material-icons">more_vert</i>
+            </div>
+        
+            <div class="collapsible-body task-details-field row">
+                <div class="description-field col s7">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+                    enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+                    nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+                    in reprehenderit in voluptate velit esse cillum dolore eu fugiat 
+                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+                    sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </div>
+        
+                <div class="participants-list col s4 push-s1">
+                    osoby przypisane do zadania:
+                    <ul>
+                        <li>
+                            <i class = "material-icons done-icon">done</i>
+                            <p>Jan Kowalski</p>
+                        </li>
+                        <li>
+                            <i class = "material-icons done-icon">done</i>
+                            <p>Anna Nowak</p>
+                        </li>
+                    </ul>
+                    <div class="done-button-field">
+                        <p>zakończ zadanie</p>
+                        <a class="btn-floating"><i class="material-icons">done</i></a>
+                    </div>
+                </div>
+        
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header single-task-field">
+                <svg class="radial-progress" viewBox="0 0 80 80">
+                    <circle class="incomplete" cx="40" cy="40" r="35"></circle>
+                    <circle class="complete" cx="40" cy="40" r="35" style="stroke-dashoffset: calc(220 - 45*220/100);"></circle>
+                    <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">45%</text>
+                </svg>
 
-        <div class="participants-list">
-            osoby przypisane do zadania:
-            <ul>
-                <li>Jan Kowalski</li>
-                <li>Anna Nowak</li>
-            </ul>
-        </div>
+                <div class="date">15.02.2021 r.</div>
+                <p>Akcja świadectw</p>
+                <div class="participants">
+                    <p>osoby: </p>
+                    <p>0</p>
+                    <i class = "material-icons">add_circle_outline</i>
+                </div>
+                <i class = "more-options material-icons">more_vert</i>
+            </div>
+        
+            <div class="collapsible-body task-details-field row">
+                <div class="description-field col s7">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+                    enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+                    nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+                    in reprehenderit in voluptate velit esse cillum dolore eu fugiat 
+                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+                    sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </div>
+        
+                <div class="participants-list col s4 push-s1">
+                    osoby przypisane do zadania:
+                    <ul>
+                        <li>
+                            <i class = "material-icons done-icon">done</i>
+                            <p>Jan Kowalski</p>
+                        </li>
+                        <li>
+                            <i class = "material-icons done-icon">done</i>
+                            <p>Anna Nowak</p>
+                        </li>
+                    </ul>
+                    <div class="done-button-field">
+                        <p>zakończ zadanie</p>
+                        <a class="btn-floating"><i class="material-icons">done</i></a>
+                    </div>
+                </div>
+        
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header single-task-field">
+                <svg class="radial-progress" viewBox="0 0 80 80">
+                    <circle class="incomplete" cx="40" cy="40" r="35"></circle>
+                    <circle class="complete" cx="40" cy="40" r="35" style="stroke-dashoffset: calc(220 - 16*220/100);"></circle>
+                    <text class="percentage" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">16%</text>
+                </svg>
 
-    </div>
-    
-
-    <div class="single-task-field">
-        <div class="date">13.01.2021 r.</div>
-        <p>Zadnie nr 2</p>
-        <div class="participants">
-            <p>osoby: </p>
-            <p>1</p>
-            <i class = "material-icons">add_circle_outline</i>
-        </div>
-        <i class = "more-options material-icons">more_vert</i>
-    </div>
-
-    <div class="single-task-field">
-        <div class="date">13.01.2021 r.</div>
-        <p>Zadnie dla 3 osób</p>
-        <div class="participants">
-            <p>osoby: </p>
-            <p>3</p>
-            <i class = "material-icons">add_circle_outline</i>
-        </div>
-        <i class = "more-options material-icons">more_vert</i>
-    </div>
-
-    <div class="single-task-field">
-        <div class="date">13.01.2021 r.</div>
-        <p>Akcja świadectw</p>
-        <div class="participants">
-            <p>osoby: </p>
-            <p>12</p>
-            <i class = "material-icons">add_circle_outline</i>
-        </div>
-        <i class = "more-options material-icons">more_vert</i>
-    </div>
-
+                <div class="date">31.10.2021 r.</div>
+                <p>Zbiórka publiczna</p>
+                <div class="participants">
+                    <p>osoby: </p>
+                    <p>0</p>
+                    <i class = "material-icons">add_circle_outline</i>
+                </div>
+                <i class = "more-options material-icons">more_vert</i>
+            </div>
+        
+            <div class="collapsible-body task-details-field row">
+                <div class="description-field col s7">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+                    enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+                    nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
+                    in reprehenderit in voluptate velit esse cillum dolore eu fugiat 
+                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
+                    sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </div>
+        
+                <div class="participants-list col s4 push-s1">
+                    osoby przypisane do zadania:
+                    <ul>
+                        <li>
+                            <i class = "material-icons done-icon">done</i>
+                            <p>Jan Kowalski</p>
+                        </li>
+                        <li>
+                            <i class = "material-icons done-icon">done</i>
+                            <p>Anna Nowak</p>
+                        </li>
+                    </ul>
+                    <div class="done-button-field">
+                        <p>zakończ zadanie</p>
+                        <a class="btn-floating"><i class="material-icons">done</i></a>
+                    </div>
+                </div>
+        
+            </div>
+        </li>
+    </ul>
+ 
 
 </div>

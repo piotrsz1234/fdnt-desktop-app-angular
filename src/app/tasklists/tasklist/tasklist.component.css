@@ -9,6 +9,7 @@ h3{
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: auto;
 }
 
 
@@ -17,7 +18,6 @@ h3{
     align-items: center;
     justify-content: center;
     margin-bottom: 7px;
-    width: 90%;
 
     border:  0.5px solid #eedea566;
     border-left: 10px solid red;
@@ -58,26 +58,95 @@ h3{
     background-color: #dbd5c011;
 }
 
+
+.collapsible{
+    width: 90%;
+    box-shadow: none;
+    border: none;
+}
+
 .task-details-field{
-    display: flex;
-    width: 85%;
     justify-content: space-between;
     margin-bottom: 40px;
 }
 
+.task-details-field .description-field{
+    font-size: 13px;
+    text-align: left;
+}
+
+
 .task-details-field .participants-list{
-    width: 30%;
     font-size: 13px;
     color: #23232393;
+    
+}
+
+.task-details-field .participants-list ul{
+    text-align: center;
 }
 
 .task-details-field .participants-list li{
+    display: flex;
+    flex-wrap: nowrap;
     font-weight: 500;
+    align-items: center;
+    justify-content: center;
 }
 
-.task-details-field .description-field{
-    width: 60%;
-    font-size: 13px;
-    text-align: left;
-
+.task-details-field .participants-list li p{
+    margin: 0;
 }
+
+.done-icon{
+    color: #15cf24;
+}
+
+.done-button-field{
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
+}
+
+.done-button-field p{
+    margin-right: 10px;
+    color: #fff;
+}
+
+.done-button-field:hover p{
+    color: #23232373;
+}
+
+
+
+
+svg.radial-progress {
+    height: auto;
+    max-width: 50px;
+    transform: rotate(-90deg);
+    width: 100%;
+    border-radius: 50%;
+  }
+
+  svg.radial-progress:hover {
+    box-shadow: 0 0 10px #23232323;
+  }
+  
+  svg.radial-progress circle {
+    fill: rgba(0,0,0,0);
+    stroke: #fff;
+    stroke-dashoffset: 219.91148575129; 
+    stroke-width: 10;
+  }
+  
+  svg.radial-progress circle.incomplete { opacity: 0.25; }
+  
+  svg.radial-progress circle.complete { stroke-dasharray: 219.91148575129; }
+  
+  svg.radial-progress text {
+    fill: #232323d8;
+    text-anchor: middle;
+    font-size: 18px;
+  }
+
+  svg.radial-progress circle { stroke: gainsboro; }
