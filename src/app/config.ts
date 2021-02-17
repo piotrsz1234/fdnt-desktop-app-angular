@@ -1,3 +1,5 @@
+import { UserInfo } from './login/user';
+
 export var apiUrl = "https://localhost:44363/api/v1.0/";
 
 export function CombineUrls(url1: string, url2: string): string
@@ -12,6 +14,12 @@ export function CombineUrls(url1: string, url2: string): string
             output += url2;
         else output += '/' + url2;
     return output;
+}
+
+export function GetUser() {
+    let temp = localStorage.getItem("user") as string;
+    if(temp == "") return null;
+    return JSON.parse(temp) as UserInfo;
 }
 
 export var emptyGuid = "00000000-0000-0000-0000-000000000000";

@@ -19,7 +19,8 @@ import { firebaseConfig } from './firebaseConfig';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { TasklistComponent } from './tasklists/tasklist/tasklist.component';
-import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { FormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
     HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
-    RichTextEditorModule
+    AngularEditorModule,
+    FormsModule
   ],
   declarations: [
     AppComponent,

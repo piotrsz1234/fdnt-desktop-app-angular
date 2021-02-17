@@ -1,41 +1,45 @@
 <div class="row">
     <div class="col s8 offset-s2">
-        <div *ngFor="let item of posts" class="post-field" [style]="getStyle(item)">
+        <div *ngFor="let item of posts;index as i" class="post-field" [id]="'post'+i">
             <div class="post-title">
+                {{setStyle(posts[i])}}
                 <p>{{item.title}}</p>
             </div>
         </div>
-        <a href="#">
-            <div class="post-field" style="background-image: url(../../assets/images/totus-tuus.jpg);">
-                <div class="post-title">
-                    <p>Konferencja Naukowa "Totus Tuus"</p>
-                </div>
-            </div>
-        </a>
-
-        <a href="#">
-            <div class="post-field" style="background-image: url(../../assets/images/akatyst.jpg);">
-                <div class="post-title">
-                    <p>Filma Artystyczny Teatru Franciszka</p>
-                </div>
-            </div>
-        </a>
     </div>
-</div>
 
-<div class="fixed-action-btn">
+    <div class="fixed-action-btn">
         <a class="btn-floating btn-large red">
-          <i class="large material-icons">mode_edit</i>
+            <i class="large material-icons">mode_edit</i>
         </a>
         <ul>
-          <li><a class="btn-floating red"><i class="material-icons">add</i></a></li>
-          <li><a class="btn-floating yellow darken-1"><i class="material-icons">edit</i></a></li>
-          <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+            <li><button class="btn-floating red" onclick="openModal(0)"><i class="material-icons">add</i></button></li>
+            <li><a class="btn-floating yellow darken-1"><i class="material-icons">edit</i></a></li>
+            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
         </ul>
-</div>
-<div id="edit-post" class="modal">
-    <ejs-richtexteditor id='test'>
-        <ng-template #valueTemplate>
-        </ng-template>
-    </ejs-richtexteditor>
-</div>
+    </div>
+    <div id="edit-post" class="modal fixed-modal">
+        <div class="row">
+            <div class="input-field col s10 offset-s1">
+                <input class="validate" type="text" (value)="currentlyInEdit.title"
+                    [value]="this.currentlyInEdit.title" />
+                <label>Tytuł postu</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s10 offset-s1">
+                <select multiple id="groups">
+                    <option *ngFor="let item of tabs; index as i" [value]="i">{{item}}</option>
+                </select>
+                <label>Grupy</label>
+            </div>
+        </div>
+        <angular-editor [(ngModel)]="htmlContent" [config]="config"></angular-editor>
+        <div class="modal-footer">
+            <div class="row">
+                <button class="btn btn-primary btn-flat" onclick="closeModal(0)">Anuluj</button>
+                <button class="btn btn-primary btn-flat" (click)="addPost(false)">Dodaj post</button>
+                <button class="btn btn-primary btn-flat" (click)="addPost(true)">Opublikuj post</button>
+            </div>
+        </div>
+    </div>

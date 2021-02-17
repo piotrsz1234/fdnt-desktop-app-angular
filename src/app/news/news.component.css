@@ -31,3 +31,8 @@
 .fixed-action-btn{
     right: 50px;
 }
+
+.fixed-modal {
+    height: 100%;
+    overflow-x: hidden;
+}

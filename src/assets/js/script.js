@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var instances = M.Timepicker.init(elems);
     var elems = document.querySelectorAll('select');
     var instances = M.FormSelect.init(elems);
+    var elems = document.querySelectorAll('.fixed-action-btn');
+    var instances = M.FloatingActionButton.init(elems, {});
    
     checkSelectedPage()
     document.addEventListener('DOMSubtreeModified', function () {
