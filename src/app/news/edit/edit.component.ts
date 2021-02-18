@@ -12,6 +12,8 @@ declare let selectValues : Function;
 export class EditComponent implements OnInit {
 
   @Input()
+  title: string = ""; 
+  @Input()
   post: Post = new Post();
   @Input()
   tabs : string[] = [];

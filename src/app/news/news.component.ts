@@ -41,7 +41,7 @@ export class NewsComponent implements OnInit {
     let user = JSON.parse(userJson) as UserInfo;
     let params = new HttpParams().set("email", user.email).set("groups", user.groups.join("\n"))
     .set("howMany", "10").set("fromWhere", "0");
-    this.http.get<Post[]>(CombineUrls(apiUrl, "Post/posts"), {params})
+    this.http.get<Post[]>(CombineUrls(apiUrl, "Post/posts"), {params, responseType: 'json'})
       .subscribe(x => {
         this.posts = x;
       });

@@ -9,17 +9,12 @@
     </div>
 
     <div class="fixed-action-btn">
-        <a class="btn-floating btn-large red">
-            <i class="large material-icons">mode_edit</i>
+        <a class="btn-floating btn-large red" onclick="openModal(0)">
+            <i class="material-icons">add</i>
         </a>
-        <ul>
-            <li><button class="btn-floating red" onclick="openModal(0)"><i class="material-icons">add</i></button></li>
-            <li><button class="btn-floating grey" ><i class="material-icons">edit</i></button></li>
-            
-        </ul>
     </div>
     <div id="edit-post" class="modal fixed-modal">
-        <app-edit [(post)]="currentlyInEdit" [tabs]="tabs" [isEdit]="false"></app-edit>
+        <app-edit [(post)]="currentlyInEdit" [tabs]="tabs" [isEdit]="false" title="Dodaj Posta"></app-edit>
         <div class="modal-footer">
             <button class="btn-flat" onclick="closeModal(0)">Anuluj</button>
             <button class="btn-flat" (click)="addPost(false)">Zapisz post</button>
