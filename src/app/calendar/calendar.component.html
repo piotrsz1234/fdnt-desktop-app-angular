@@ -1,6 +1,6 @@
 <div class="row no-margins">
 	<div class="center col s4 offset-s4">
-		<h6 >{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h6>
+		<h6>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h6>
 	</div>
 	<div class="input-field col s3 offset-s1">
 		<select #mySelect (change)='changedView(mySelect.value)'>
@@ -11,11 +11,13 @@
 	</div>
 </div>
 <div [ngSwitch]="view">
-	<mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events" [activeDayIsOpen]="activeDayIsOpen"
-		(dayClicked)="dayClicked($event.day)">
+	<mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
+		[activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)">
 	</mwl-calendar-month-view>
-	<mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"></mwl-calendar-day-view>
-	<mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"></mwl-calendar-week-view>
+	<mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events">
+	</mwl-calendar-day-view>
+	<mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events">
+	</mwl-calendar-week-view>
 </div>
 <div class="row margin center">
 	<div class="left">
@@ -77,6 +79,7 @@
 		<div class="input-field">
 			<select id="tasklist" class="browser-default"
 				[value]="indexOfTaskList(taskLists, currentlyInEdit.taskListID)">
+				<option disabled selected value="-1">Wybierz listę zadań</option>
 				<option *ngFor="let item of taskLists; index as i" [value]="i">{{item.name}}</option>
 			</select>
 
@@ -95,10 +98,76 @@
 	</div>
 </div>
 
-<div id="remove-event" class="modal modal-fixed-footer">
+<div id="remove-event" class="modal">
 	<p>Czy na pewno chcesz usunąć to wydarzenie?</p>
 	<div class="modal-footer">
 		<button onclick="closeModal(-1)" class="modal-close waves-effect waves-red btn-flat">Nie</button>
 		<button (click)="deleteEvent()" class="modal-close waves-effect waves-green btn-flat">Tak</button>
+	</div>
+</div>
+
+<div id="show-event" class="modal">
+	<div class="col s10 offset-s1">
+		<p>Wydarzenie</p>
+		<div class="container" id="edit-event-container">
+			<div class="input-field">
+				<input disabled [value]="currentlyInEdit.name" placeholder="Nazwa wydarzenia" id="show-event-name"
+					type="text" class="validate">
+				<label for="show-event-name">Nazwa wydarzenia</label>
+			</div>
+			<div class="input-field row">
+				<p>Grupy: </p>
+				<div>
+				<div class="chip" *ngFor="let item of currentlyInEdit.forWho.substr(0, currentlyInEdit.forWho.length-1).split('\n'); index as i">
+					{{item}}
+				</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input id="show-begin-date" type="text" class="datepicker" disabled>
+					<label for="show-begin-date">Data początku</label>
+				</div>
+				<div class="input-field col s6">
+					<input id="show-begin-time" type="text" class="timepicker" disabled>
+					<label for="show-begin-time">Czas początku</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input id="show-end-date" type="text" class="datepicker" disabled>
+					<label for="show-end-date">Data końca</label>
+				</div>
+				<div class="input-field col s6">
+					<input id="show-end-time" type="text" class="timepicker" disabled>
+					<label for="show-end-time">Czas końca</label>
+				</div>
+			</div>
+			<div class="input-field">
+				<input disabled [value]="currentlyInEdit.location" placeholder="Lokalizacja"
+					id="show-event-location" type="text" class="validate">
+				<label for="location">Lokalizacja</label>
+			</div>
+			<div class="input-field">
+				<select id="show-tasklist" disabled class="browser-default"
+					[value]="indexOfTaskList(taskLists, currentlyInEdit.taskListID)">
+					<option disabled selected>Wybierz listę zadań</option>
+					<option *ngFor="let item of taskLists; index as i" [value]="i">{{item.name}}</option>
+				</select>
+
+			</div>
+
+			<div class="input-field">
+				<select id="show-category" disabled class="browser-default"
+					[value]="indexOfCategory(categories, currentlyInEdit.category)">
+					<option *ngFor="let item of categories; index as i" [value]="i">{{item.name}}</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-flat">Anuluj</button>
+		<button class="btn btn-flat" *ngIf="!isConfirmed" (click)="registerForEvent()">Zarejestruj</button>
+		<button class="btn btn-flat" *ngIf="isConfirmed" (click)="unregisterForEvent()">Usuń rejestrację</button>
 	</div>
 </div>

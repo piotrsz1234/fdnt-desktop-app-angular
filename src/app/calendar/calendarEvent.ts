@@ -1,4 +1,6 @@
 import { CalendarEvent } from 'angular-calendar';
+import { emptyGuid, GetUser } from '../config';
+import { UserInfo } from '../login/user';
 
 export class APICalendarEvent {
 	id : string = "00000000-0000-0000-0000-000000000000";
@@ -12,6 +14,35 @@ export class APICalendarEvent {
 	category : string = "";
 	creatorEmail : string = "";
 
+}
+
+export class Participation {
+	id: string = "";
+	user: string = "";
+	calendarEventId: string = "";
+	hasOwnerConfirmed: boolean = false;
+	hasParticipantConfirmed: boolean = false;
+
+}
+
+export function configureParticipationForRegistrator(calendarEvent : APICalendarEvent) {
+		let registration = new Participation();
+		registration.id = emptyGuid;
+		registration.user = (GetUser() as UserInfo).email;
+		registration.calendarEventId = calendarEvent.id;
+		registration.hasParticipantConfirmed = true;
+		registration.hasOwnerConfirmed = false;
+	return registration;
+}
+
+export function configureParticipationAsInvitation(calendarEvent : APICalendarEvent) {
+	let registration = new Participation();
+	registration.id = emptyGuid;
+	registration.user = (GetUser() as UserInfo).email;
+	registration.calendarEventId = calendarEvent.id;
+	registration.hasParticipantConfirmed = false;
+	registration.hasOwnerConfirmed = true;
+	return registration;
 }
 
 export function AreTheyTheSame(event1 :APICalendarEvent, event2 : CalendarEvent) {

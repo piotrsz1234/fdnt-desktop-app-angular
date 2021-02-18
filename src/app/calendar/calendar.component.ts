@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CalendarView, CalendarEvent, CalendarEventAction } from 'angular-calendar';
 import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { apiUrl, emptyGuid } from '../config'
+import { apiUrl, emptyGuid, GetUser } from '../config'
 import { CombineUrls } from '../config'
 import { UserInfo } from '../login/user'
-import { APICalendarEvent, CategoryCalendarEvent, CalculateColorForHex, CalculateSecondaryColorForHex, AreTheyTheSame } from './calendarEvent'
+import { APICalendarEvent, CategoryCalendarEvent, CalculateColorForHex, CalculateSecondaryColorForHex, AreTheyTheSame, Participation, configureParticipationForRegistrator } from './calendarEvent'
 import { isSameDay, isSameMonth } from 'date-fns';
 import { TaskList } from '../tasklists/tasklist';
 
-declare let openModal : Function;
+declare let openModal: Function;
+declare let openModalById : Function;
+declare let closeModalById : Function;
 declare let setDate : Function;
 declare let setTime : Function;
 declare let selectValues : Function;
@@ -60,12 +62,21 @@ export class CalendarComponent implements OnInit {
 				this.removeEvent(event);
 			},
 		},
+		{
+			label: '<i class="material-icons tiny">visibility</i>',
+			a11yLabel: 'Preview',
+			onClick: ({ event }: { event: CalendarEvent }): void => {
+				this.watch(event);
+			},
+		}
 	];
 
 	editModalHeader: string = "Edytuj wydarzenie";
 	editModalButtonText: string = "Zapisz zmiany";
 
-	tabs:string[] = [];
+	tabs: string[] = [];
+	
+	isConfirmed: boolean = false;
 
 	constructor(private http: HttpClient) {
 	}
@@ -111,11 +122,7 @@ export class CalendarComponent implements OnInit {
 	}
 
 	fetchEvents(): void {
-		let temp = localStorage.getItem("user");
-		let user = new UserInfo();
-		if (temp != null)
-			user = JSON.parse(temp);
-		else return;
+		let user = GetUser() as UserInfo;
 		let params = new HttpParams().set("groups", user.groups.join("\n")).set("email", user.email)
 		let tempEvents = this.http.get<APICalendarEvent[]>(CombineUrls(apiUrl, "/Calendar/events"), { params });
 		tempEvents.subscribe((observer) => {
@@ -161,7 +168,6 @@ export class CalendarComponent implements OnInit {
 		let tempEvents = this.http.get<TaskList[]>(CombineUrls(apiUrl, "/TaskList/tasklists"), { params });
 		tempEvents.subscribe((observer) => {
 			this.taskLists = [];
-			this.taskLists.push(new TaskList());
 			for(let i=0;i<observer.length;i++)
 				this.taskLists.push(observer[i]);
 		});
@@ -181,6 +187,17 @@ export class CalendarComponent implements OnInit {
 		let selected = this.currentlyInEdit.forWho.split('\n');
 		if(selected[selected.length-1] == "") selected.pop();
 		this.setValuesInSelect(selected);
+	}
+
+	watch(event: CalendarEvent): void {
+		let temp = this.apisEvents.find(x => AreTheyTheSame(x, event));
+		this.currentlyInEdit = temp as APICalendarEvent;
+		this.isRegisteredForEvent();
+		setDate(this.currentlyInEdit.whenBegins, 2);
+		setDate(this.currentlyInEdit.whenBegins, 3);
+		setTime(this.currentlyInEdit.whenEnds, 2);
+		setTime(this.currentlyInEdit.whenEnds, 3);
+		openModalById("show-event");
 	}
 
 	setValuesInSelect(array:string[]) {
@@ -210,7 +227,7 @@ export class CalendarComponent implements OnInit {
 	removeEvent(event: CalendarEvent): void {
 		let temp = this.apisEvents.find(x => AreTheyTheSame(x, event));
 		 this.currentlyInEdit = temp as APICalendarEvent;
-		openModal(-1);
+		openModalById("remove-event");
 	}
 
 	indexOfTaskList(array : Array<TaskList>, id : string) : number {
@@ -226,8 +243,7 @@ export class CalendarComponent implements OnInit {
 	}
 
 	deleteEvent() : void {
-		let json = localStorage.getItem("user") as string;
-		let info = JSON.parse(json) as UserInfo;
+		let info = GetUser() as UserInfo;
 		let data = {
 			"calendarEventID" : this.currentlyInEdit.id,
 			"owner" : info.email
@@ -349,6 +365,52 @@ export class CalendarComponent implements OnInit {
 			this.view = CalendarView.Week;
 		if(v == "2")
 			this.view = CalendarView.Month;
+	}
+
+	registerForEvent(): void {
+		let registration = configureParticipationForRegistrator(this.currentlyInEdit);
+		this.http.post(CombineUrls(apiUrl, "Calendar/participations"), registration)
+			.subscribe((observer) => {
+				showToast("Wysłano informację, o chęci rejestracji do udziału w wydarzeniu");
+				closeModalById("show-event");
+			}, (err: HttpErrorResponse) => {
+					showToast("Coś poszło nie tak :(");
+		})
+	}
+
+	unregisterForEvent(): void {
+		let user = GetUser() as UserInfo;
+		let data = {
+			calendarEventID: this.currentlyInEdit.id,
+			owner: user.email
+		};
+		const options = {
+			headers: new HttpHeaders({
+			  'Content-Type': 'application/json',
+			}),
+			body: data,
+		  };
+		this.http.delete(CombineUrls(apiUrl, "/Calendar/participations"), options)
+		.subscribe(x => {
+			showToast("Udalo się usunac");
+			this.isRegisteredForEvent();
+			closeModalById("show-event");
+		},
+		(err : HttpErrorResponse) => {
+			showToast("Coś poszło nie tak :(")
+		});
+	}
+
+	isRegisteredForEvent(): void {
+		let user = GetUser() as UserInfo;
+		let params = new HttpParams().set("eventId", this.currentlyInEdit.id).set("email", user.email);
+		this.http.get(CombineUrls(apiUrl, "Calendar/participation"), {params})
+			.subscribe((observer) => {
+				if (observer != null) this.isConfirmed = true;
+				else this.isConfirmed = false;
+			}, (err: HttpErrorResponse) => {
+					showToast("Coś poszło nie tak :(");
+			});
 	}
 
 }
