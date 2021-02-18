@@ -1,10 +1,7 @@
-<h3>lista zadań do wykonania na Dzień Papieski</h3>
 <div class="tasks-field">
-    <div class="line"></div>
-
-    <div>szczegóły:
+    <div>Szczegóły:
         <div> Lista zadań do wydarzenia: "{{taskList.name}}"</div>
-        <div class="date">data: {{getDateString(taskList)}}.</div>
+        <div class="date">data: {{formatDateString(taskList)}}</div>
     </div>
     <div class="line"></div>
 
@@ -15,14 +12,14 @@
                     <circle class="incomplete" cx="40" cy="40" r="35"></circle>
                     <circle class="complete" id="{{'progress' + i}}" cx="40" cy="40" r="35"></circle>
                     <text class="percentage" id="{{'progressT' + i}}" x="50%" y="57%"
-                        transform="matrix(0, 1, -1, 0, 80, 0)">82%</text>
+                        transform="matrix(0, 1, -1, 0, 80, 0)">{{getPercentage(i)}}%</text>
                 </svg>
                 {{setPercentage(i)}}
-                <div class="date">{{getDateString(taskList)}}.</div>
+                <div class="date">{{formatDateString(taskList)}}</div>
                 <p>{{task.title}}</p>
                 <div class="participants">
-                    <p>osoby: </p>
-                    <p>{{declarations.length}}</p>
+                    <p>osoby:</p>
+                    <p>{{getDeclarations(task).length}}</p>
                     <i class="material-icons">add_circle_outline</i>
                 </div>
                 <i class="more-options material-icons">more_vert</i>
@@ -36,18 +33,18 @@
                 <div class="participants-list col s4 push-s1">
                     osoby przypisane do zadania:
                     <ul>
-                        <li *ngFor="let item of declarations">
-                            <i class="material-icons done-icon">{{(item.isComplete)?"done":""}}</i>
-                            <p>{{item.person}}</p>
+                        <li *ngFor="let item of getDeclarations(task)">
+                            <i class="material-icons done-icon">{{(item.isCompleted)?"done":""}}</i>
+                            <p>{{emailToFancyName(item.person)}}</p>
                         </li>
                     </ul>
-                    <div *ngIf="doesPersonDeclared() && !doesPersonCompleted()" class="done-button-field">
+                    <div *ngIf="doesPersonDeclared(task) && !doesPersonCompleted(task)" class="done-button-field">
                         <p>zakończ zadanie</p>
-                        <a class="btn-floating"><i class="material-icons">done</i></a>
+                        <a class="btn-floating" (click)="completeOwnPart(i)"><i class="material-icons">done</i></a>
                     </div>
-                    <div *ngIf="!doesPersonDeclared() && canUserBeAdded(task)" class="done-button-field">
+                    <div *ngIf="!doesPersonDeclared(task) && canUserBeAdded(task)" class="done-button-field">
                         <p>dołącz do zadania</p>
-                        <a class="btn-floating"><i class="material-icons">add</i></a>
+                        <a class="btn-floating" (click)="addDeclaration(i)"><i class="material-icons">add</i></a>
                     </div>
                 </div>
             </div>
@@ -59,15 +56,16 @@
         <i class="large material-icons">mode_edit</i>
     </a>
     <ul>
-        <li><a class="btn-floating red"><i class="material-icons">add</i></a></li>
+        <li><a class="btn-floating red" onclick="openModalById('add-tasklist')"><i class="material-icons">add</i></a>
+        </li>
         <li><a class="btn-floating yellow darken-1"><i class="material-icons">remove</i></a></li>
     </ul>
 </div>
 
-<div class="modal" id="add-tasklist">
-        <app-edit-tasklist [(ngModel)]="currentlyInEdit"></app-edit-tasklist>
+<div class="modal modal-fixed-footer" id="add-tasklist" style="min-height: 100%">
+    <app-edit-tasklist [(task)]="currentlyInEdit"></app-edit-tasklist>
     <div class="modal-footer">
         <button class="btn btn-flat">Anuluj</button>
-        <button class="btn btn-flat">Dodaj</button>
-    </div>  
+        <button class="btn btn-flat" (click)="addTask()">Dodaj</button>
+    </div>
 </div>

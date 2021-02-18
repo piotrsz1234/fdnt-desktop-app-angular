@@ -1,22 +1,28 @@
-<h3>Twoje listy zadań</h3>
+<h3 *ngIf="taskLists.length > 0">Twoje listy zadań</h3>
 
-<div class="tasklists-field">
+<div class="tasklists-field" *ngIf="taskLists.length > 0">
     <div class="line"></div>
+    <a *ngFor="let t of taskLists; index as i" (click)="goToChild(i)" href="/(main:tasklist)"
+        class="single-tasklist-field">
+        <div class="date">{{formatDateString(t)}}</div>
+        <p>{{t.name}}</p>
+    </a>
+</div>
 
-    <a href="tasklist/1" class="single-tasklist-field">
-        <div class="date">13.01.2021 r.</div>
-        <p>Lista 1</p>
+<div class="center" *ngIf="taskLists.length === 0">
+    <h4>Nie masz żadnych List Zadań</h4>
+</div>
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" onclick="openModal(0)">
+        <i class="material-icons">add</i>
     </a>
-    <a href="#" class="single-tasklist-field">
-        <div class="date">13.01.2021 r.</div>
-        <p>Lista 2</p>
-    </a>
-    <a href="#" class="single-tasklist-field">
-        <div class="date">13.01.2021 r.</div>
-        <p>Lista z wydarzenia</p>
-    </a>
-    <a href="#" class="single-tasklist-field">
-        <div class="date">13.01.2021 r.</div>
-        <p>Prywatna lista zadań</p>
-    </a>
+</div>
+
+<div class="modal">
+    <app-edit-tasklists [(taskList)]="currentlyInEdit" [title]="'Dodaj Listę Zadań'"></app-edit-tasklists>
+    <div class="modal-footer">
+        <button onclick="closeModal(0)" class="btn btn-flat">Anuluj</button>
+        <button (click)="addTaskList()" class="btn btn-flat">Dodaj</button>
+    </div>
 </div>

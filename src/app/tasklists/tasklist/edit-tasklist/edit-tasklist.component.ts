@@ -20,7 +20,10 @@ export class EditTasklistComponent implements OnInit {
   }
 
   onChange(): void {
-    this.taskChange.emit();
+    this.task.title = (document.getElementById("title") as HTMLInputElement).value;
+    this.task.text = (document.getElementById("text") as HTMLInputElement).value as string;
+    this.task.maximumCountOfPeopleWhoCanDoIt = +(document.getElementById("max") as HTMLSelectElement).value;
+    this.taskChange.emit(this.task);
   }
 
 }

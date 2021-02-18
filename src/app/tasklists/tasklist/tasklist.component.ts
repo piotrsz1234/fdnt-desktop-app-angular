@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Task, TaskList, Declaration } from '../tasklist';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { CombineUrls, apiUrl, Count, GetUser } from 'src/app/config';
+import { CombineUrls, apiUrl, Count, GetUser, getDateString, RemoveWhere, FirstOrDefault, Where } from 'src/app/config';
 import { UserInfo } from 'src/app/login/user';
 
 declare let showToast: Function;
-declare let closeModal : Function;
+declare let closeModal: Function;
 
 @Component({
   selector: 'app-tasklist',
@@ -14,11 +14,11 @@ declare let closeModal : Function;
 })
 export class TasklistComponent implements OnInit {
 
-  constructor(private http : HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  tasks : Task[] = [];
-  taskList : TaskList = new TaskList();
-  declarations : Declaration[] = [];
+  tasks: Task[] = [];
+  taskList: TaskList = new TaskList();
+  declarations: Declaration[] = [];
 
   currentlyInEdit: Task = new Task();
 
@@ -28,61 +28,124 @@ export class TasklistComponent implements OnInit {
     this.fetchTasks();
   }
 
-  fetchTasks() : void {
+  fetchTasks(): void {
     let params = new HttpParams().set("taskListID", this.taskList.id);
-    this.http.get<Task[]>(CombineUrls(apiUrl, "TaskList/tasks"), {params})
-    .subscribe((observer) => {
-      this.tasks = observer;
-    },
-    (err : HttpErrorResponse) => {
-      showToast("Coś poszło nie tak :(");
-    });
-  }
-
-  fetchDeclarations(taskID : string) : void {
-    let params = new HttpParams().set("taskId", taskID);
-    this.http.get<Declaration[]>(CombineUrls(apiUrl, "TaskList/declarations"), {params})
+    this.http.get<Task[]>(CombineUrls(apiUrl, "TaskList/tasks"), { params })
       .subscribe((observer) => {
-        this.declarations = observer;
+        this.tasks = observer;
+        for (let k of observer)
+          this.fetchDeclarations(k.id);
       },
-      (err : HttpErrorResponse) => {
-        showToast("Coś poszło nie tak :(");
-      });
+        (err: HttpErrorResponse) => {
+          showToast("Coś poszło nie tak :(");
+        });
   }
 
-  getDateString(taskList : TaskList) : string {
+  fetchDeclarations(taskID: string): void {
+    let params = new HttpParams().set("taskId", taskID);
+    this.http.get<Declaration[]>(CombineUrls(apiUrl, "TaskList/declarations"), { params })
+      .subscribe((observer) => {
+        this.declarations = Where(this.declarations, (f: Declaration) => f.id != taskID);
+        for (let k of observer)
+          this.declarations.push(k);
+      },
+        (err: HttpErrorResponse) => {
+          showToast("Coś poszło nie tak :(");
+        });
+  }
+
+  getDateString(taskList: TaskList): string {
     return new Date(taskList.deadline).toDateString();
   }
 
-  setPercentage(id : number) : void {
-    let temp = document.getElementById("progress"+id) as HTMLElement;
-    let done = Count(this.declarations, (f : Declaration) => f.isComplete);
-    temp.style.strokeDashoffset = "calc(220 - "+(Math.floor(done / this.declarations.length * 100))+"*220/100)";    
-    (document.getElementById("progressT"+id) as HTMLElement).innerText = (Math.floor(done / this.declarations.length * 100)).toString();
+  formatDateString(tasklist: TaskList): string {
+    return getDateString(new Date(tasklist.deadline));
   }
 
-  doesPersonDeclared () : boolean {
+  getPercentage(id: number): number {
+    let temp = document.getElementById("progress" + id) as HTMLElement;
+    let done = Count(this.declarations, (f: Declaration) => f.isCompleted);
+    temp.style.strokeDashoffset = "calc(220 - " + (Math.floor(done / this.declarations.length * 100)) + "*220/100)";
+    console.log(temp.style.strokeDashoffset);
+    return (Math.floor(done / this.declarations.length * 100));
+  }
+
+  setPercentage(id: number): void {
+    (document.getElementById("progressT" + id) as HTMLElement).innerText = this.getPercentage(id).toString();
+  }
+
+  doesPersonDeclared(task : Task): boolean {
     let user = GetUser() as UserInfo;
-    return Count(this.declarations, (f : Declaration) => f.person == user.email) > 0;
+    return Count(this.declarations, (f: Declaration) => f.person == user.email && task.id == f.task) > 0;
   }
 
-  doesPersonCompleted () : boolean {
+  getDeclarations(task: Task): Array<Declaration> {
+    return Where(this.declarations, (f: Declaration) => f.task == task.id);
+  }
+
+  doesPersonCompleted(t : Task): boolean {
     let user = GetUser() as UserInfo;
-    return Count(this.declarations, (f : Declaration) => f.person == user.email && f.isComplete) > 0;
+    return Count(this.declarations, (f: Declaration) =>f.task == t.id && f.person == user.email && f.isCompleted) > 0;
   }
 
-  canUserBeAdded (task : Task) : boolean {
-    return this.declarations.length < task.maximumCountOfPeopleWhoCanDoIt;
+  canUserBeAdded(task: Task): boolean {
+    let user = GetUser() as UserInfo;
+    return Count(this.declarations, (f: Declaration) =>f.task == task.id && f.person == user.email) < task.maximumCountOfPeopleWhoCanDoIt;
+  }
+
+  createDeclaration(user : UserInfo, id : number) : Declaration {
+    let declaration = new Declaration();
+    declaration.task = this.tasks[id].id;
+    declaration.person = user.email;
+    declaration.isCompleted = false;
+    return declaration;
+  }
+
+  addDeclaration(id: number): void {
+    let user = GetUser() as UserInfo;
+    let declaration = this.createDeclaration(user, id);
+    this.http.post(CombineUrls(apiUrl, "TaskList/declarations"), declaration)
+      .subscribe(x => {
+        showToast("Udało się dodać twoją deklarację");
+        this.fetchDeclarations(this.tasks[id].id);
+      }, (err: HttpErrorResponse) => {
+          showToast("Coś poszło nie tak :(");
+    })
   }
 
   addTask(): void {
+    this.currentlyInEdit.ownerId = this.taskList.id;
+    console.log(JSON.stringify(this.currentlyInEdit));
     this.http.post(CombineUrls(apiUrl, "TaskList/tasks"), this.currentlyInEdit)
       .subscribe((observer) => {
         showToast("Udało się dodać. Jej!");
         closeModal(0);
+        this.fetchTasks();
+      }, (err: HttpErrorResponse) => {
+        showToast("Coś poszło nie tak :(");
+      });
+  }
+
+  emailToFancyName(email: string): string {
+    email = email.substr(0, email.indexOf('@'));
+    email = email.substr(0, 1).toUpperCase() + email.substr(1);
+    let index = email.indexOf('.') + 1;
+    email = email.substr(0, index) + email.substr(index, 1).toUpperCase() + email.substr(index + 1);
+    email = email.replace('.', ' ');
+    return email;
+  }
+
+  completeOwnPart(id: number): void {
+    let user = GetUser() as UserInfo;
+    let dec = FirstOrDefault(this.declarations, (x: Declaration) => x.task == this.tasks[id].id && x.person == user.email);
+    if (dec == undefined) return;
+    this.http.patch(CombineUrls(apiUrl, "/TaskList/declarations"), dec)
+      .subscribe(() => {
+        showToast("Udało się przesłać informacje");
+        this.fetchDeclarations(this.tasks[id].id);
       }, (err: HttpErrorResponse) => {
           showToast("Coś poszło nie tak :(");
-      });
+    })
   }
 
 }
