@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="input-field col s10 offset-s1 no-margins">
+        <input class="validate" type="text" id="title" (value)="post.title"
+            [value]="post.title" (change)="changedData()" />
+        <label>Tytuł postu</label>
+    </div>
+</div>
+<div class="row no-margins">
+    <div class="input-field col s10 offset-s1">
+        <select multiple id="groups" (change)="changedData()">
+            <option *ngFor="let item of tabs; index as i" [value]="i">{{item}}</option>
+        </select>
+        <label>Grupy</label>
+    </div>
+</div>
+<angular-editor id="editor" [(ngModel)]="post.html" [config]="config"></angular-editor>

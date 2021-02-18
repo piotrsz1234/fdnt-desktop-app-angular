@@ -14,32 +14,16 @@
         </a>
         <ul>
             <li><button class="btn-floating red" onclick="openModal(0)"><i class="material-icons">add</i></button></li>
-            <li><a class="btn-floating yellow darken-1"><i class="material-icons">edit</i></a></li>
-            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+            <li><button class="btn-floating grey" ><i class="material-icons">edit</i></button></li>
+            
         </ul>
     </div>
     <div id="edit-post" class="modal fixed-modal">
-        <div class="row">
-            <div class="input-field col s10 offset-s1">
-                <input class="validate" type="text" (value)="currentlyInEdit.title"
-                    [value]="this.currentlyInEdit.title" />
-                <label>Tytuł postu</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s10 offset-s1">
-                <select multiple id="groups">
-                    <option *ngFor="let item of tabs; index as i" [value]="i">{{item}}</option>
-                </select>
-                <label>Grupy</label>
-            </div>
-        </div>
-        <angular-editor [(ngModel)]="htmlContent" [config]="config"></angular-editor>
+        <app-edit [(post)]="currentlyInEdit" [tabs]="tabs" [isEdit]="false"></app-edit>
         <div class="modal-footer">
-            <div class="row">
-                <button class="btn btn-primary btn-flat" onclick="closeModal(0)">Anuluj</button>
-                <button class="btn btn-primary btn-flat" (click)="addPost(false)">Dodaj post</button>
-                <button class="btn btn-primary btn-flat" (click)="addPost(true)">Opublikuj post</button>
-            </div>
+            <button class="btn-flat" onclick="closeModal(0)">Anuluj</button>
+            <button class="btn-flat" (click)="addPost(false)">Zapisz post</button>
+            <button class="btn-flat" (click)="addPost(true)">Opublikuj post</button>
         </div>
     </div>
+</div>

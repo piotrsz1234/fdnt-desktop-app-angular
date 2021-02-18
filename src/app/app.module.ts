@@ -21,6 +21,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { TasklistComponent } from './tasklists/tasklist/tasklist.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { FormsModule} from '@angular/forms';
+import { PostComponent } from './news/post/post.component';
+import { EditComponent } from './news/edit/edit.component';
 
 @NgModule({
   imports: [
@@ -59,7 +61,9 @@ import { FormsModule} from '@angular/forms';
     MailComponent,
     MailSidebarComponent,
     CalendarSidebarComponent,
-    TasklistComponent
+    TasklistComponent,
+    PostComponent,
+    EditComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
