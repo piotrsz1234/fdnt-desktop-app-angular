@@ -23,6 +23,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { FormsModule} from '@angular/forms';
 import { PostComponent } from './news/post/post.component';
 import { EditComponent } from './news/edit/edit.component';
+import { EditTasklistComponent } from './tasklists/tasklist/edit-tasklist/edit-tasklist.component';
+import { EditTasklistsComponent } from './tasklists/edit-tasklists/edit-tasklists.component';
 
 @NgModule({
   imports: [
@@ -38,13 +40,11 @@ import { EditComponent } from './news/edit/edit.component';
       {path: "news", component: NewsComponent, outlet: 'main'},
       {path: "calendar", component: CalendarComponent, outlet: 'main'},
       {path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar'},
-      {path: "tasklist", component: TasklistsComponent, outlet: 'main', children: [
-        {path: ":id", component: TasklistComponent, outlet: 'main'}
-      ]},
-      {path: "id", component: TasklistComponent, outlet: 'main'},
+      {path: "tasklists", component: TasklistsComponent, outlet: 'main'},
+      {path: "tasklist", component: TasklistComponent, outlet: 'main'},
       {path: "mail", component: MailComponent, outlet: 'main'},
       {path: "mail", component: MailSidebarComponent, outlet: 'sidebar'},
-      {path: '', redirectTo: '/calendar', pathMatch: 'full'}
+      {path: '', redirectTo: '/calendar', pathMatch: "full"}
     ]),
     HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),
@@ -63,7 +63,9 @@ import { EditComponent } from './news/edit/edit.component';
     CalendarSidebarComponent,
     TasklistComponent,
     PostComponent,
-    EditComponent
+    EditComponent,
+    EditTasklistComponent,
+    EditTasklistsComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

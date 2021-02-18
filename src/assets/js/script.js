@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var instances = M.FormSelect.init(elems);
     var elems = document.querySelectorAll('.fixed-action-btn');
     var instances = M.FloatingActionButton.init(elems, {});
+    var elems = document.querySelectorAll('.dropdown-trigger');
+    var instances = M.Dropdown.init(elems, {});
    
     checkSelectedPage()
     document.addEventListener('DOMSubtreeModified', function () {
@@ -35,17 +37,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function openModal(id) {
     var elems = document.querySelectorAll('.modal');
-    console.log(elems.length);
     var instances = M.Modal.init(elems);
     if(id == -1) instances[instances.length-1].open();
     else
       instances[id].open();
   }
 
+  function openModalById(id) {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+    for(let i=0;i<instances.length;i++) 
+      if(instances[i].id == id)
+        openModal(i);
+  }
+
   function closeModal(id) {
     var elems = document.querySelectorAll('.modal');
     var instance = M.Modal.getInstance(elems[id]);
     instance.close();
+  }
+
+  function closeModalById(id) {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+    for(let i=0;i<instances.length;i++) 
+      if(instances[i].id == id)
+        closeModal(i);
   }
 
   function setDate(date, id) {
@@ -79,4 +96,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function showToast(text) {
     M.toast({html: text});
+  }
+
+  function setMinimumDateForDatePicker() {
+    let temp = document.querySelectorAll(".datepicker");
+    M.Datepicker.init(temp, {minDate: new Date()});
   }
