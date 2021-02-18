@@ -1,0 +1,21 @@
+<p>{{title}}</p>
+<div class="row">
+    <div class="input-field col s10 offset-s1">
+        <input id="name" class="validate" [(ngModel)]="taskList.name" type="text" />
+        <label for="name">Nazwa Listy zadań</label>
+    </div>
+</div>
+<div class="row">
+    <div class="input-field col s10 offset-s1">
+    <input type="text" class="datepicker" id="date" (click)="activatePicker()" (change)="dateChanged()">
+    <label for="date">Termin ukończenia</label>
+</div>
+</div>
+<div class="row">
+    <div class="input-field col s10 offset-s1">
+        <select (change)="selectChange()" id="owner" class="browser-default">
+            <option disabled selected>Wybierz właściciela Listy Zadań</option>
+            <option *ngFor="let item of options;index as i" [value]="i" [selected]="isSelected(item)">{{item}}</option>
+        </select>
+    </div>
+</div>
