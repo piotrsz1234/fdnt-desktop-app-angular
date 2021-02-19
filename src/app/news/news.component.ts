@@ -69,6 +69,7 @@ export class NewsComponent implements OnInit {
           this.fetchPosts();
           showToast("Udało się "+((publish)?"opublikować":"dodać")+" posta!");
           closeModal(0);
+          this.currentlyInEdit = new Post();
         },
         (err : HttpErrorResponse) => {
           showToast("Coś poszło nie tak :(");
@@ -76,6 +77,7 @@ export class NewsComponent implements OnInit {
     else this.http.post(CombineUrls(apiUrl, "Post/posts/publish"), this.currentlyInEdit)
     .subscribe(x => {
       showToast("Udało się opublikować zmiany!");
+      this.currentlyInEdit = new Post();
       closeModal(0);
     },
     (err : HttpErrorResponse) => {

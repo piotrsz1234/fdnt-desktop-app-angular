@@ -55,8 +55,8 @@ export class EditComponent implements OnInit {
   config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
-    height: '15rem',
-    minHeight: '5rem',
+    height: '22rem',
+    minHeight: '15rem',
     placeholder: 'Enter text here...',
     translate: 'no',
     defaultParagraphSeparator: 'p',
