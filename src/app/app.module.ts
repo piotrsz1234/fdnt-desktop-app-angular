@@ -43,8 +43,8 @@ import { DisplayPostsComponent } from './news/display-posts/display-posts.compon
       { path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar' },
       { path: "tasklists", component: TasklistsComponent, outlet: 'main' },
       { path: "tasklist", component: TasklistComponent, outlet: 'main' },
-      { path: "mail", component: MailComponent, outlet: 'main' },
-      { path: "mail", component: MailSidebarComponent, outlet: 'sidebar' },
+      //{ path: "mail", component: MailComponent, outlet: 'main' },
+      //{ path: "mail", component: MailSidebarComponent, outlet: 'sidebar' },
       { path: "post", component: PostComponent, outlet: 'main' },
       { path: '', redirectTo: '/(main:login//sidebar:calendar)', pathMatch: 'full' }
     ]),
