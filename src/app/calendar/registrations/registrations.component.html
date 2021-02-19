@@ -1,0 +1,23 @@
+<div id="show-registration" class="modal">
+    <div *ngIf="AreThereAnyToConfirm()">
+        <ul class="collection with-header" *ngFor="let item of calendarEvents;index as i">
+            <div *ngIf="participations[i] != undefined && participations[i].length > 0">
+                <li class="collection-header">
+                    <h4>Lista chętnych do udziału w wydarzeniu: {{item.name}}</h4>
+                </li>
+                <li class="collection-item" *ngFor="let p of participations[i]">
+                    <div class="row no-margins">{{emailToFancyName(p.user)}}
+                        <a class="secondary-content">
+                            <button class="btn red btn-small side-margin">Odrzuć</button>
+                            <button (click)="confirmParticipation(p)"
+                                class="btn green btn-small side-margin">Potwierdź</button>
+                        </a>
+                    </div>
+                </li>
+            </div>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-flat" onclick="closeModalById('show-registration')">Wyjdź</button>
+    </div>
+</div>
