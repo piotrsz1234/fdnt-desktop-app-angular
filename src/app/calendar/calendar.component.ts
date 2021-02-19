@@ -7,7 +7,8 @@ import { CombineUrls } from '../config'
 import { UserInfo } from '../login/user'
 import { APICalendarEvent, CategoryCalendarEvent, CalculateColorForHex, CalculateSecondaryColorForHex, AreTheyTheSame, Participation, configureParticipationForRegistrator } from './calendarEvent'
 import { isSameDay, isSameMonth } from 'date-fns';
-import { TaskList } from '../tasklists/tasklist';
+import { TaskList, Declaration } from '../tasklists/tasklist';
+import { ng } from '@angular/core/global'
 
 declare let openModal: Function;
 declare let openModalById : Function;
@@ -78,6 +79,10 @@ export class CalendarComponent implements OnInit {
 	
 	isConfirmed: boolean = false;
 
+	participation: Participation = new Participation();
+
+	anyParticipations: boolean = false;
+
 	constructor(private http: HttpClient) {
 	}
 
@@ -88,7 +93,8 @@ export class CalendarComponent implements OnInit {
 		let json = localStorage.getItem("tabs");
 		if(json == null) return;
 		let temp = JSON.parse(json);
-		if(temp != null) this.tabs = temp;
+		if (temp != null) this.tabs = temp;
+		console.log(this.anyParticipations);
 	}
 
 	activateDamnThing(v: string): void {
@@ -369,10 +375,13 @@ export class CalendarComponent implements OnInit {
 
 	registerForEvent(): void {
 		let registration = configureParticipationForRegistrator(this.currentlyInEdit);
+		console.log(registration);
 		this.http.post(CombineUrls(apiUrl, "Calendar/participations"), registration)
 			.subscribe((observer) => {
 				showToast("Wysłano informację, o chęci rejestracji do udziału w wydarzeniu");
 				closeModalById("show-event");
+				this.getButtonStatus();
+				ng.getComponent(document.getElementById("registration") as HTMLElement)
 			}, (err: HttpErrorResponse) => {
 					showToast("Coś poszło nie tak :(");
 		})
@@ -404,13 +413,34 @@ export class CalendarComponent implements OnInit {
 	isRegisteredForEvent(): void {
 		let user = GetUser() as UserInfo;
 		let params = new HttpParams().set("eventId", this.currentlyInEdit.id).set("email", user.email);
-		this.http.get(CombineUrls(apiUrl, "Calendar/participation"), {params})
+		this.http.get<Participation>(CombineUrls(apiUrl, "Calendar/participation"), {params})
 			.subscribe((observer) => {
 				if (observer != null) this.isConfirmed = true;
 				else this.isConfirmed = false;
+				this.participation = observer;
+				(document.getElementById("status") as HTMLInputElement).value = this.getStatus();
 			}, (err: HttpErrorResponse) => {
 					showToast("Coś poszło nie tak :(");
 			});
+	}
+
+	getStatus(): string {
+		if (this.participation == null || !this.isConfirmed)
+			return "Nie zajestrowano się";
+		if (this.participation != null && this.participation.hasOwnerConfirmed == this.participation.hasParticipantConfirmed)
+			return "Potwierdzono rejestrację";
+		return "Oczekuje na potwierdzenie";
+	}
+
+	checkRegistrations() {
+		if(this.anyParticipations)
+			openModalById("show-registration");
+	}
+
+	getButtonStatus() {
+		if (!this.anyParticipations)
+			(document.getElementById("btn") as HTMLElement).className = "btn btn-primary side-margin disabled";
+		else (document.getElementById("btn") as HTMLElement).className = "btn btn-primary side-margin";
 	}
 
 }

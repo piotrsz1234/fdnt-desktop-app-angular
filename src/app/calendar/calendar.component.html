@@ -24,7 +24,8 @@
 		<button mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()"
 			class="btn grey btn-primary">Poprzedni miesiąc</button>
 	</div>
-	<a class="btn green btn-primary modal-trigger" (click)="addEvent()" href="#edit-event">Add Event</a>
+	<a class="btn green btn-primary modal-trigger side-margin" (click)="addEvent();" onclick="openModal(0)">Dodaj wydarzenie</a>
+	<button id="btn" class="btn btn-primary side-margin" (click)="checkRegistrations()">Przeglądaj rejestracje</button>
 	<div class="right">
 		<button mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()"
 			class="btn grey btn-primary">Następny miesiąc</button>
@@ -49,7 +50,7 @@
 			<select multiple id="groups">
 				<option *ngFor="let item of tabs; index as i" [value]="i">{{item}}</option>
 			</select>
-			<label>Grupy</label>
+			<label for="groups">Grupy</label>
 		</div>
 		<div class="row">
 			<div class="input-field col s6">
@@ -163,11 +164,17 @@
 					<option *ngFor="let item of categories; index as i" [value]="i">{{item.name}}</option>
 				</select>
 			</div>
+			<div class="input-field">
+				<input id="status" disabled class="validate" />
+				<label for="status" class="active">Status rejestracji</label>
+			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button class="btn btn-flat">Anuluj</button>
+		<button class="btn btn-flat" onclick="closeModalById('show-event')">Anuluj</button>
 		<button class="btn btn-flat" *ngIf="!isConfirmed" (click)="registerForEvent()">Zarejestruj</button>
 		<button class="btn btn-flat" *ngIf="isConfirmed" (click)="unregisterForEvent()">Usuń rejestrację</button>
 	</div>
 </div>
+{{getButtonStatus()}}
+<app-registrations id="registration" [calendarEvents]="apisEvents" (areThereAny)="anyParticipations"></app-registrations>

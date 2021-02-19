@@ -25,6 +25,7 @@ import { PostComponent } from './news/post/post.component';
 import { EditComponent } from './news/edit/edit.component';
 import { EditTasklistComponent } from './tasklists/tasklist/edit-tasklist/edit-tasklist.component';
 import { EditTasklistsComponent } from './tasklists/edit-tasklists/edit-tasklists.component';
+import { RegistrationsComponent } from './calendar/registrations/registrations.component';
 
 @NgModule({
   imports: [
@@ -65,7 +66,8 @@ import { EditTasklistsComponent } from './tasklists/edit-tasklists/edit-tasklist
     PostComponent,
     EditComponent,
     EditTasklistComponent,
-    EditTasklistsComponent
+    EditTasklistsComponent,
+    RegistrationsComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
