@@ -1,0 +1,26 @@
+<div class="col s8 offset-s2">
+    <div *ngIf="inEdition; then inEdit else preview"></div>
+        <ng-template #preview>
+            <div *ngFor="let item of getPublishedPosts();index as i" class="post-field" [id]="'post'+i">
+                <div class="post-title">
+                    {{setStyle(posts[i])}}
+                    <p>{{item.title}}</p>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #inEdit>
+            <div class="card blue-grey darken-2" *ngFor="let item of minePosts;index as i">
+                <div class="card-content white-text">
+                    <span class="card-title">{{item.title}}</span>
+                </div>
+                <div class="card-action">
+                    <a (click)="removePost(item)" class="fix-pointer">Usuń</a>
+                    <a (click)="editPost(item)" class="fix-pointer">Edytuj</a>
+                    <a>Historia zmian</a>
+                    <a (click)="publishPost(item)" class="fix-pointer" *ngIf="!item.isPublished">Publikuj</a>
+                </div>
+            </div>
+        </ng-template>
+</div>
+<app-edit [post]="currentlyInEdit" [id]="'edition'" [title]='"Edytuj Post"' 
+[isEdit]="true" [tabs]="tabs" (requestSuccessed)="onRequestCompleted()" ></app-edit>

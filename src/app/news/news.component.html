@@ -1,24 +1,22 @@
 <div class="row">
-    <div class="col s8 offset-s2">
-        <div *ngFor="let item of posts;index as i" class="post-field" [id]="'post'+i">
-            <div class="post-title">
-                {{setStyle(posts[i])}}
-                <p>{{item.title}}</p>
-            </div>
-        </div>
+    <br />
+    <div class="switch center">
+        <label>
+            Przegląd Postów
+            <input id="edit" type="checkbox" [checked]="isInEditionMode" (change)="changeOfMode()">
+            <span class="lever"></span>
+            Edycja
+        </label>
     </div>
-
+</div>
+<div class="row">
+    <app-display-posts [posts]="posts" [inEdition]="isInEditionMode" (change)="change()"></app-display-posts>
     <div class="fixed-action-btn">
         <a class="btn-floating btn-large red" onclick="openModal(0)">
             <i class="material-icons">add</i>
         </a>
     </div>
-    <div id="edit-post" class="modal fixed-modal">
-        <app-edit [(post)]="currentlyInEdit" [tabs]="tabs" [isEdit]="false" title="Dodaj Posta"></app-edit>
-        <div class="modal-footer">
-            <button class="btn-flat" onclick="closeModal(0)">Anuluj</button>
-            <button class="btn-flat" (click)="addPost(false)">Zapisz post</button>
-            <button class="btn-flat" (click)="addPost(true)">Opublikuj post</button>
-        </div>
-    </div>
+
+    <app-edit [id]="'edit-event'" (post)="currentlyInEdit" [tabs]="tabs" [isEdit]="false" title="Dodaj Posta">
+    </app-edit>
 </div>

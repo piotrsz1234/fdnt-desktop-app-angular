@@ -102,3 +102,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let temp = document.querySelectorAll(".datepicker");
     M.Datepicker.init(temp, {minDate: new Date()});
   }
+
+  function getEventsValue(event) {
+    console.log(event.target.value);
+    return event.target.value;
+  }

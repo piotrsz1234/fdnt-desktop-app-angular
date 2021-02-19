@@ -1,17 +1,23 @@
-<p>{{title}}</p>
-<div class="row">
-    <div class="input-field col s10 offset-s1 no-margins">
-        <input class="validate" type="text" id="title" (value)="post.title"
-            [value]="post.title" (change)="changedData()" />
-        <label for="title">Tytuł postu</label>
+<div [id]="id" class="modal fixed-modal">
+    <p>{{title}}</p>
+    <div class="row">
+        <div class="input-field col s10 offset-s1 no-margins">
+            <input class="validate" type="text" id="title" name="title" (change)="titleChanged($event);changedData()" />
+            <label for="title">Tytuł postu</label>
+        </div>
+    </div>
+    <div class="row no-margins">
+        <div class="input-field col s10 offset-s1">
+            <select multiple id="groups" (change)="changedData()">
+                <option *ngFor="let item of tabs; index as i" [value]="i">{{item}}</option>
+            </select>
+            <label for="groups">Grupy</label>
+        </div>
+    </div>
+    <angular-editor id="editor" [(ngModel)]="post.html" [config]="config"></angular-editor>
+    <div class="modal-footer">
+        <button class="btn-flat" onclick="closeModal(0)">Anuluj</button>
+        <button class="btn-flat" (click)="addPost(false)">Zapisz post</button>
+        <button class="btn-flat" (click)="addPost(true)">Opublikuj post</button>
     </div>
 </div>
-<div class="row no-margins">
-    <div class="input-field col s10 offset-s1">
-        <select multiple id="groups" (change)="changedData()">
-            <option *ngFor="let item of tabs; index as i" [value]="i">{{item}}</option>
-        </select>
-        <label for="groups">Grupy</label>
-    </div>
-</div>
-<angular-editor id="editor" [(ngModel)]="post.html" [config]="config"></angular-editor>

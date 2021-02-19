@@ -1,7 +1,7 @@
 import { emptyGuid } from '../config';
 
 export class Post {
-    iD : string = "";
+    id : string = "";
     html : string = "";
     publishDate : string = "";
     forWho : string = "";
@@ -10,7 +10,7 @@ export class Post {
     title : string = "";
 
     constructor() {
-        this.iD = emptyGuid;
+        this.id = emptyGuid;
     }
 
 }
