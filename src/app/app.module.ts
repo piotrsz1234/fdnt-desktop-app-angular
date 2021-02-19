@@ -19,7 +19,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { TasklistComponent } from './tasklists/tasklist/tasklist.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
-import { FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { PostComponent } from './news/post/post.component';
 import { EditComponent } from './news/edit/edit.component';
 import { EditTasklistComponent } from './tasklists/tasklist/edit-tasklist/edit-tasklist.component';
@@ -37,15 +37,16 @@ import { DisplayPostsComponent } from './news/display-posts/display-posts.compon
       useFactory: adapterFactory,
     }),
     RouterModule.forRoot([
-      {path: "login", component: LoginComponent, outlet: 'main'},
-      {path: "news", component: NewsComponent, outlet: 'main'},
-      {path: "calendar", component: CalendarComponent, outlet: 'main'},
-      {path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar'},
-      {path: "tasklists", component: TasklistsComponent, outlet: 'main'},
-      {path: "tasklist", component: TasklistComponent, outlet: 'main'},
-      {path: "mail", component: MailComponent, outlet: 'main'},
-      {path: "mail", component: MailSidebarComponent, outlet: 'sidebar'},
-      {path: '', redirectTo: '/(main:login//sidebar:calendar)', pathMatch: 'full' }
+      { path: "login", component: LoginComponent, outlet: 'main' },
+      { path: "news", component: NewsComponent, outlet: 'main' },
+      { path: "calendar", component: CalendarComponent, outlet: 'main' },
+      { path: "calendar", component: CalendarSidebarComponent, outlet: 'sidebar' },
+      { path: "tasklists", component: TasklistsComponent, outlet: 'main' },
+      { path: "tasklist", component: TasklistComponent, outlet: 'main' },
+      { path: "mail", component: MailComponent, outlet: 'main' },
+      { path: "mail", component: MailSidebarComponent, outlet: 'sidebar' },
+      { path: "post", component: PostComponent, outlet: 'main' },
+      { path: '', redirectTo: '/(main:login//sidebar:calendar)', pathMatch: 'full' }
     ]),
     HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),

@@ -109,7 +109,7 @@ export class EditComponent implements OnInit, OnChanges {
     let user = GetUser() as UserInfo;
     this.post.isPublished = publish;
     this.post.owner = user.email;
-    this.post.publishDate = JSON.stringify(new Date());
+    this.post.publishTime = JSON.stringify(new Date());
     if (this.post.id == emptyGuid)
       this.http.post(CombineUrls(apiUrl, "Post/posts"), this.post)
         .subscribe(x => {

@@ -99,4 +99,8 @@ export class DisplayPostsComponent implements OnInit {
     this.change.emit();
   }
 
+  setPostToView(post: Post) {
+    localStorage.setItem("post", JSON.stringify(post));
+  }
+
 }

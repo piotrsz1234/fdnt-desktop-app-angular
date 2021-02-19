@@ -3,7 +3,7 @@ import { emptyGuid } from '../config';
 export class Post {
     id : string = "";
     html : string = "";
-    publishDate : string = "";
+    publishTime : string = "";
     forWho : string = "";
     owner : string = "";
     isPublished : boolean = false;
