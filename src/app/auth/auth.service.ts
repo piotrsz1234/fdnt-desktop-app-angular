@@ -32,7 +32,7 @@ export class AuthService {
 						c++;
 					}
 					localStorage.setItem("user", JSON.stringify(info));
-					router.navigate(["calendar"]);
+					router.navigateByUrl("(main:calendar//sidebar:calendar)");
 				});
 				let tabs = database.object("tabs").snapshotChanges();
 				tabs.subscribe(x => {

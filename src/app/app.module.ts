@@ -45,7 +45,7 @@ import { DisplayPostsComponent } from './news/display-posts/display-posts.compon
       {path: "tasklist", component: TasklistComponent, outlet: 'main'},
       {path: "mail", component: MailComponent, outlet: 'main'},
       {path: "mail", component: MailSidebarComponent, outlet: 'sidebar'},
-      {path: '', redirectTo: '/calendar', pathMatch: "full"}
+      {path: '', redirectTo: '/(main:login//sidebar:calendar)', pathMatch: 'full' }
     ]),
     HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),
