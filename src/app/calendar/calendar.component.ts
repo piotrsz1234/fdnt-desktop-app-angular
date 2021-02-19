@@ -8,6 +8,7 @@ import { UserInfo } from '../login/user'
 import { APICalendarEvent, CategoryCalendarEvent, CalculateColorForHex, CalculateSecondaryColorForHex, AreTheyTheSame, Participation, configureParticipationForRegistrator } from './calendarEvent'
 import { isSameDay, isSameMonth } from 'date-fns';
 import { TaskList, Declaration } from '../tasklists/tasklist';
+import { Observable, observable } from 'rxjs';
 
 declare let openModal: Function;
 declare let openModalById : Function;
@@ -25,6 +26,8 @@ declare let closeModal : Function;
 })
 @Injectable()
 export class CalendarComponent implements OnInit {
+
+	update: number = 0;
 
 	view: CalendarView = CalendarView.Month;
 
@@ -93,7 +96,7 @@ export class CalendarComponent implements OnInit {
 		if(json == null) return;
 		let temp = JSON.parse(json);
 		if (temp != null) this.tabs = temp;
-		console.log(this.anyParticipations);
+		this.update++;
 	}
 
 	activateDamnThing(v: string): void {
@@ -147,6 +150,7 @@ export class CalendarComponent implements OnInit {
 				};
 				this.setCategory(this.apisEvents[i].category);
 			}
+			this.update++;
 		});
 	}
 
@@ -379,8 +383,7 @@ export class CalendarComponent implements OnInit {
 			.subscribe((observer) => {
 				showToast("Wysłano informację, o chęci rejestracji do udziału w wydarzeniu");
 				closeModalById("show-event");
-				this.getButtonStatus();
-				ng.getComponent(document.getElementById("registration") as HTMLElement)
+				this.update++;
 			}, (err: HttpErrorResponse) => {
 					showToast("Coś poszło nie tak :(");
 		})
@@ -436,10 +439,15 @@ export class CalendarComponent implements OnInit {
 			openModalById("show-registration");
 	}
 
-	getButtonStatus() {
-		if (!this.anyParticipations)
+	getButtonStatus(t : boolean) {
+		if (!t)
 			(document.getElementById("btn") as HTMLElement).className = "btn btn-primary side-margin disabled";
 		else (document.getElementById("btn") as HTMLElement).className = "btn btn-primary side-margin";
+	}
+
+	anyParticipationsChange(t: boolean) {
+		this.anyParticipations = t;
+		this.getButtonStatus(t);
 	}
 
 }

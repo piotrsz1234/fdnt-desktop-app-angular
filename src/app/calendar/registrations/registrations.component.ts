@@ -16,6 +16,9 @@ export class RegistrationsComponent implements OnInit {
   @Input()
   calendarEvents: APICalendarEvent[] = [];
 
+  @Input()
+  update: number = 0;
+
   participations: Participation[][] = [];
 
   @Output()
@@ -24,10 +27,14 @@ export class RegistrationsComponent implements OnInit {
   constructor(private http : HttpClient) { }
 
   ngOnInit(): void {
-    
+    this.areThereAny.emit(this.AreThereAnyToConfirm());
   }
 
-  ngOnChanges(changes: SimpleChanges | null): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    this.updateData();
+  }
+
+  updateData() {
     let email = (GetUser() as UserInfo).email;
     this.calendarEvents = Where(this.calendarEvents, (f: APICalendarEvent) => f.creatorEmail == email);
     for (let k of this.calendarEvents)
@@ -39,7 +46,6 @@ export class RegistrationsComponent implements OnInit {
     let params = new HttpParams().set("eventID", e.id);
     this.http.get<Participation[]>(CombineUrls(apiUrl, "Calendar/participations"), { params })
       .subscribe((observer) => {
-        console.log(observer);
         this.participations[this.calendarEvents.indexOf(e)] = [];
         if (observer.length > 0)
           for (let k of observer)
@@ -70,7 +76,7 @@ export class RegistrationsComponent implements OnInit {
     this.http.post(CombineUrls(apiUrl, "Calendar/participation"), p)
       .subscribe(() => {
         showToast("Pomyślnie zaakceptowano");
-        this.ngOnChanges(null);
+        this.updateData();
       }, (err: HttpErrorResponse) => {
           showToast("Coś poszło nie tak :(");
     })
@@ -98,8 +104,9 @@ export class RegistrationsComponent implements OnInit {
 
   AreThereAnyToConfirm() {
     let output = false;
-    for (let k of this.participations)
-      if (k.length > 0) output = true;
+    for (let k of this.participations) {
+    if (k != undefined && k.length > 0) output = true;
+    }
     this.areThereAny.emit(output);
     return output;
   }

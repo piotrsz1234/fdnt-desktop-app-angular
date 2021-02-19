@@ -176,5 +176,5 @@
 		<button class="btn btn-flat" *ngIf="isConfirmed" (click)="unregisterForEvent()">Usuń rejestrację</button>
 	</div>
 </div>
-{{getButtonStatus()}}
-<app-registrations id="registration" [calendarEvents]="apisEvents" (areThereAny)="anyParticipations"></app-registrations>
+
+<app-registrations id="registration" [update]="update" [calendarEvents]="apisEvents" (areThereAny)="anyParticipationsChange($event)"></app-registrations>
