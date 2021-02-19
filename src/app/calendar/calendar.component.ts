@@ -8,7 +8,6 @@ import { UserInfo } from '../login/user'
 import { APICalendarEvent, CategoryCalendarEvent, CalculateColorForHex, CalculateSecondaryColorForHex, AreTheyTheSame, Participation, configureParticipationForRegistrator } from './calendarEvent'
 import { isSameDay, isSameMonth } from 'date-fns';
 import { TaskList, Declaration } from '../tasklists/tasklist';
-import { ng } from '@angular/core/global'
 
 declare let openModal: Function;
 declare let openModalById : Function;
