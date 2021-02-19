@@ -1,22 +1,30 @@
-<div class="row">
-    <br />
-    <div class="switch center">
-        <label>
-            Przegląd Postów
-            <input id="edit" type="checkbox" [checked]="isInEditionMode" (change)="changeOfMode()">
-            <span class="lever"></span>
-            Edycja
-        </label>
+<div style="position: relative">
+    <div class="row">
+        <br />
+        <div class="switch center">
+            <label>
+                Przegląd Postów
+                <input id="edit" type="checkbox" [checked]="isInEditionMode" (change)="changeOfMode()">
+                <span class="lever"></span>
+                Edycja
+            </label>
+        </div>
     </div>
-</div>
-<div class="row">
-    <app-display-posts [posts]="posts" [inEdition]="isInEditionMode" (change)="change()"></app-display-posts>
-    <div class="fixed-action-btn">
-        <a class="btn-floating btn-large red" onclick="openModal(0)">
-            <i class="material-icons">add</i>
-        </a>
-    </div>
+    <div class="row">
+        <app-display-posts [posts]="posts" [inEdition]="isInEditionMode" (change)="change()"></app-display-posts>
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large red" onclick="openModal(0)">
+                <i class="material-icons">add</i>
+            </a>
+        </div>
 
-    <app-edit [id]="'edit-event'" (post)="currentlyInEdit" [tabs]="tabs" [isEdit]="false" title="Dodaj Posta">
-    </app-edit>
+        <app-edit [id]="'edit-event'" (post)="currentlyInEdit" [tabs]="tabs" [isEdit]="false" title="Dodaj Posta">
+        </app-edit>
+    </div>
+    <div class="right-button button" (click)="nextPage()">
+        
+    </div>
+    <div class="left-button button" (click)="previousPage()">
+        
+    </div>
 </div>

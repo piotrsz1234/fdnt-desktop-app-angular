@@ -6,3 +6,23 @@
     height: 100%;
     overflow-x: hidden;
 }
+
+.right-button {
+    position: absolute;
+    right: 0;
+    width: 5%;
+    top: 0;
+    bottom: 0;
+    background-color: #bbbbbb33;
+}
+.button:hover {
+    background-color: #bbbbbb11;
+}
+.left-button {
+    position: absolute;
+    left: 0;
+    width: 5%;
+    top: 0;
+    bottom: 0;
+    background-color: #bbbbbb33;
+}

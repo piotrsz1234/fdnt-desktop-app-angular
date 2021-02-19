@@ -48,8 +48,18 @@ export class AuthService {
 			}
 		})
 	}
-	login(email:string, password:string) {
+	
+	login(email: string, password: string) {
 		return this.afAuth.signInWithEmailAndPassword(email, password);
+	}
+
+	isLogged() {
+		return localStorage.getItem("user") != null;
+	}
+
+	logout() {
+		localStorage.removeItem("user");
+		return this.afAuth.signOut();
 	}
 
 	removeDot(s : string) : string {
