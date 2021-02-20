@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Task, TaskList, Declaration } from '../tasklist';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { CombineUrls, apiUrl, Count, GetUser, getDateString, RemoveWhere, FirstOrDefault, Where } from 'src/app/config';
+import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { CombineUrls, apiUrl, Count, GetUser, getDateString, RemoveWhere, FirstOrDefault, Where, emptyGuid } from 'src/app/config';
 import { UserInfo } from 'src/app/login/user';
 
 declare let showToast: Function;
@@ -64,10 +64,15 @@ export class TasklistComponent implements OnInit {
 
   getPercentage(id: number): number {
     let temp = document.getElementById("progress" + id) as HTMLElement;
-    let done = Count(this.declarations, (f: Declaration) => f.isCompleted);
-    temp.style.strokeDashoffset = "calc(220 - " + (Math.floor(done / this.declarations.length * 100)) + "*220/100)";
-    console.log(temp.style.strokeDashoffset);
-    return (Math.floor(done / this.declarations.length * 100));
+    let done = Count(this.declarations, (f: Declaration) => f.isCompleted && f.task == this.tasks[id].id);
+    let all = Count(this.declarations, (f: Declaration) => f.task == this.tasks[id].id);
+    if (all > 0) {
+      temp.style.strokeDashoffset = "calc(220 - " + (Math.floor(done / all * 100)) + "*220/100)";
+      return (Math.floor(done / all * 100));
+    } else {
+      temp.style.strokeDashoffset = "calc(220 - " + 0 + "*220/100)";
+      return 0;
+    }
   }
 
   setPercentage(id: number): void {
@@ -120,6 +125,7 @@ export class TasklistComponent implements OnInit {
       .subscribe((observer) => {
         showToast("Udało się dodać. Jej!");
         closeModal(0);
+        this.currentlyInEdit = new Task();
         this.fetchTasks();
       }, (err: HttpErrorResponse) => {
         showToast("Coś poszło nie tak :(");
@@ -146,6 +152,48 @@ export class TasklistComponent implements OnInit {
       }, (err: HttpErrorResponse) => {
           showToast("Coś poszło nie tak :(");
     })
+  }
+
+  isCurrentlyEditing() {
+    return this.currentlyInEdit.id == emptyGuid;
+  }
+
+  editTask(task: Task) {
+    this.currentlyInEdit = task;
+  }
+
+  saveChanges() {
+    this.http.patch(CombineUrls(apiUrl, "TaskList/tasks"), this.currentlyInEdit)
+      .subscribe(() => {
+        showToast("Udało się zedytować");
+        this.fetchTasks();
+      }, (err: HttpErrorResponse) => {
+          showToast("Coś poszło nie tak :(")
+    })
+  }
+
+  discardChanges() {
+    this.currentlyInEdit = new Task();
+  }
+
+  removeTask(task: Task) {
+    let data = {
+      taskId: task.id,
+      owner: (GetUser() as UserInfo).email
+    }
+    let options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      body: data
+    };
+    this.http.delete(CombineUrls(apiUrl, "TaskList/tasks"), options)
+      .subscribe(() => {
+        showToast("Udało się zedytować");
+        this.fetchTasks();
+      }, (err: HttpErrorResponse) => {
+          showToast("Coś poszło nie tak :(");
+      });
   }
 
 }

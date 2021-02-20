@@ -14,58 +14,60 @@ export class AuthService {
 		this.afAuth.authState.subscribe(user => {
 			if (user) {
 				this.user = user;
-				if(user.email == null) return;
+				if (user.email == null) return;
 				let path = "users/" + user.email.substr(0, user.email.indexOf("@"));
 				path = this.removeDot(path);
 				let usersTabs = database.object(path).snapshotChanges();
 				let info = new UserInfo();
 				info.email = user.email;
 				usersTabs.subscribe(x => {
-					let c =0;
-					for(let k in JSON.parse(JSON.stringify(x.payload.val()))){
+					let c = 0;
+					for (let k in JSON.parse(JSON.stringify(x.payload.val()))) {
 						c++;
 					}
 					info.groups = new Array<string>(c);
-					c =0;
-					for(let k in JSON.parse(JSON.stringify(x.payload.val()))){
+					c = 0;
+					for (let k in JSON.parse(JSON.stringify(x.payload.val()))) {
 						info.groups[c] = k;
 						c++;
 					}
+					if (!this.isLogged())
+						router.navigateByUrl("(main:news//sidebar:calendar)");
+					localStorage.setItem('firebaseUser', JSON.stringify(this.user));
 					localStorage.setItem("user", JSON.stringify(info));
-					router.navigateByUrl("(main:calendar//sidebar:calendar)");
 				});
 				let tabs = database.object("tabs").snapshotChanges();
 				tabs.subscribe(x => {
 					let tab = new Array<string>();
-					for(let k in JSON.parse(JSON.stringify(x.payload.val()))){
+					for (let k in JSON.parse(JSON.stringify(x.payload.val()))) {
 						tab.push(k);
 					}
 					localStorage.setItem("tabs", JSON.stringify(tab));
 				});
-				localStorage.setItem('firebaseUser', JSON.stringify(this.user));
 			} else {
 				localStorage.removeItem('firebaseUser');
 			}
 		})
 	}
-	
+
 	login(email: string, password: string) {
 		return this.afAuth.signInWithEmailAndPassword(email, password);
 	}
 
 	isLogged() {
-		return localStorage.getItem("user") != null;
+		return localStorage.getItem('firebaseUser') != null;
 	}
 
 	logout() {
-		localStorage.removeItem("user");
+		//localStorage.removeItem("user");
+		localStorage.removeItem('firebaseUser');
 		return this.afAuth.signOut();
 	}
 
-	removeDot(s : string) : string {
+	removeDot(s: string): string {
 		let output = "";
-		for(let i=0;i<s.length;i++)
-			if(s[i] != '.') output +=s[i];
+		for (let i = 0; i < s.length; i++)
+			if (s[i] != '.') output += s[i];
 		return output;
 	}
 }

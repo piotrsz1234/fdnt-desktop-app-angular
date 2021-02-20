@@ -37,7 +37,10 @@ export class EditComponent implements OnInit, OnChanges {
   }
 
   getGroups(): void {
+    let allSelect = document.getElementsByName("groups");
     let select = document.getElementById("groups") as HTMLElement;
+    for (let i = 0; i < allSelect.length; i++)
+      if (allSelect[i] != undefined) select = allSelect[i];
     let values = selectValues(select) as string[];
     for (let k in values) {
       this.post.forWho += this.tabs[(+k as number)] + "\n";
@@ -109,7 +112,7 @@ export class EditComponent implements OnInit, OnChanges {
     let user = GetUser() as UserInfo;
     this.post.isPublished = publish;
     this.post.owner = user.email;
-    this.post.publishTime = JSON.stringify(new Date());
+    console.log(this.post);
     if (this.post.id == emptyGuid)
       this.http.post(CombineUrls(apiUrl, "Post/posts"), this.post)
         .subscribe(x => {
@@ -121,7 +124,7 @@ export class EditComponent implements OnInit, OnChanges {
           (err: HttpErrorResponse) => {
             showToast("Coś poszło nie tak :(");
           });
-    else this.http.post(CombineUrls(apiUrl, "Post/posts" + ((publish) ? "/publish" : "")), this.post)
+    else this.http.patch(CombineUrls(apiUrl, "Post/posts" + ((publish) ? "/publish" : "")), this.post)
       .subscribe(x => {
         showToast("Udało się opublikować zmiany!");
         this.post = new Post();

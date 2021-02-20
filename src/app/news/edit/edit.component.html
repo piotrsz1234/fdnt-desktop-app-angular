@@ -6,18 +6,18 @@
             <label for="title">Tytuł postu</label>
         </div>
     </div>
-    <div class="row no-margins">
+    <div class="row">
         <div class="input-field col s10 offset-s1">
-            <select multiple id="groups" (change)="changedData()">
+            <select multiple id="groups" name="groups" (change)="changedData()">
                 <option *ngFor="let item of tabs; index as i" [value]="i">{{item}}</option>
             </select>
-            <label for="groups">Grupy</label>
+            <label>Grupy</label>
         </div>
     </div>
     <angular-editor id="editor" [(ngModel)]="post.html" [config]="config"></angular-editor>
     <div class="modal-footer">
         <button class="btn-flat" onclick="closeModal(0)">Anuluj</button>
-        <button class="btn-flat" (click)="addPost(false)">Zapisz post</button>
+        <button class="btn-flat" *ngIf="!post.isPublished" (click)="addPost(false)">Zapisz post</button>
         <button class="btn-flat" (click)="addPost(true)">Opublikuj post</button>
     </div>
 </div>
