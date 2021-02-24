@@ -4,7 +4,6 @@ h3{
     color: #23232393;
     font-weight: 200;
 }
-
 .tasks-field{
     display: flex;
     flex-direction: column;
@@ -12,80 +11,66 @@ h3{
     margin: auto;
 }
 
-
 .single-task-field{
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 7px;
-
     border:  0.5px solid #eedea566;
     border-left: 10px solid red;
     border-radius: 5px;
-
     color: #000;
 }
-
 .line{
     width: 90%;
     border-bottom: 1px solid #23232333;
     margin-bottom: 50px;
 }
-
 .single-task-field .date{
     width: 20%;
 }
-
 .single-task-field p{
     width: 50%;
     text-align: left;
     font-weight: 500;
 }
-
 .participants{
     width: 20%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
 .more-options{
     width: 10%;
+    color: #23232393;
 }
-
 .single-task-field:hover{
     box-shadow: 2px 5px 10px#23232333;
     background-color: #dbd5c011;
 }
-
 
 .collapsible{
     width: 90%;
     box-shadow: none;
     border: none;
 }
-
 .task-details-field{
     justify-content: space-between;
     margin-bottom: 40px;
 }
-
 .task-details-field .description-field{
     font-size: 13px;
     text-align: left;
 }
-
 
 .task-details-field .participants-list{
     font-size: 13px;
     color: #23232393;
     
 }
-
 .task-details-field .participants-list ul{
     text-align: center;
 }
-
 .task-details-field .participants-list li{
     display: flex;
     flex-wrap: nowrap;
@@ -93,30 +78,35 @@ h3{
     align-items: center;
     justify-content: center;
 }
-
 .task-details-field .participants-list li p{
     margin: 0;
 }
-
 .done-icon{
     color: #15cf24;
 }
-
 .done-button-field{
     justify-content: flex-end;
     display: flex;
     align-items: center;
 }
-
 .done-button-field p{
     margin-right: 10px;
     color: #fff;
 }
-
 .done-button-field:hover p{
     color: #23232373;
 }
-
+.dropdown-trigger.btn{
+    background-color: #ffffff00;
+    box-shadow: none;
+}
+.collapsible .dropdown-content{
+    min-width: 130px;
+    width: 130px;
+}
+.dropdown-content li>a{
+    display: flex;
+}
 
 
 
@@ -127,7 +117,6 @@ svg.radial-progress {
     width: 100%;
     border-radius: 50%;
   }
-
   svg.radial-progress:hover {
     box-shadow: 0 0 10px #23232323;
   }
@@ -148,5 +137,4 @@ svg.radial-progress {
     text-anchor: middle;
     font-size: 18px;
   }
-
   svg.radial-progress circle { stroke: gainsboro; }

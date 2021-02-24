@@ -22,7 +22,16 @@
                     <p>{{getDeclarations(task).length}}</p>
                     <i class="material-icons">add_circle_outline</i>
                 </div>
-                <i class="more-options material-icons">more_vert</i>
+                <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>
+                    <i class = "more-options material-icons">more_vert</i>
+                </a>
+
+                <!-- Dropdown Structure -->
+                <ul id='dropdown1' class='dropdown-content'>
+                  <li><a href="#!"><i class="material-icons">delete</i>usuń</a></li>
+                  <li><a href="#!"><i class="material-icons">edit</i>edytuj</a></li>
+                </ul>
+
             </div>
 
             <div class="collapsible-body task-details-field row">

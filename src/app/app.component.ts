@@ -15,8 +15,10 @@ export class AppComponent implements OnInit {
 	constructor(private router: Router, private auth : AuthService) {
 		router.events.subscribe((ev) => {
 			if (ev instanceof NavigationEnd) {
+				/*
 				if (!auth.isLogged())
 					router.navigateByUrl("/(main:login//sidebar:calendar)");
+					*/
 			}
 		});
 	}
