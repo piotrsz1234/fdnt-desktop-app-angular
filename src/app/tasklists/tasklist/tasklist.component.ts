@@ -3,9 +3,11 @@ import { Task, TaskList, Declaration } from '../tasklist';
 import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { CombineUrls, apiUrl, Count, GetUser, getDateString, RemoveWhere, FirstOrDefault, Where, emptyGuid } from 'src/app/config';
 import { UserInfo } from 'src/app/login/user';
+import { Router } from '@angular/router';
 
 declare let showToast: Function;
 declare let closeModal: Function;
+declare let loadMaterializeCss: Function;
 
 @Component({
   selector: 'app-tasklist',
@@ -14,7 +16,7 @@ declare let closeModal: Function;
 })
 export class TasklistComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router : Router) { }
 
   tasks: Task[] = [];
   taskList: TaskList = new TaskList();
@@ -23,8 +25,12 @@ export class TasklistComponent implements OnInit {
   currentlyInEdit: Task = new Task();
 
   ngOnInit(): void {
+    loadMaterializeCss();
     console.log(localStorage.getItem("tasklist"));
     this.taskList = JSON.parse(localStorage.getItem("tasklist") as string) as TaskList;
+    if (this.taskList == null)
+      this.router.navigateByUrl("(main:tasklists)");
+    localStorage.removeItem("tasklist");
     this.fetchTasks();
   }
 
@@ -45,7 +51,7 @@ export class TasklistComponent implements OnInit {
     let params = new HttpParams().set("taskId", taskID);
     this.http.get<Declaration[]>(CombineUrls(apiUrl, "TaskList/declarations"), { params })
       .subscribe((observer) => {
-        this.declarations = Where(this.declarations, (f: Declaration) => f.id != taskID);
+        this.declarations = RemoveWhere(this.declarations, (f: Declaration) => f.task == taskID);
         for (let k of observer)
           this.declarations.push(k);
       },
@@ -155,7 +161,7 @@ export class TasklistComponent implements OnInit {
   }
 
   isCurrentlyEditing() {
-    return this.currentlyInEdit.id == emptyGuid;
+    return !(this.currentlyInEdit.id == emptyGuid || this.currentlyInEdit.id == "");
   }
 
   editTask(task: Task) {
@@ -177,6 +183,7 @@ export class TasklistComponent implements OnInit {
   }
 
   removeTask(task: Task) {
+    console.log("asdasd");
     let data = {
       taskId: task.id,
       owner: (GetUser() as UserInfo).email
@@ -189,7 +196,8 @@ export class TasklistComponent implements OnInit {
     };
     this.http.delete(CombineUrls(apiUrl, "TaskList/tasks"), options)
       .subscribe(() => {
-        showToast("Udało się zedytować");
+        console.log("Co się odchrzania?")
+        showToast("Udało się usunąć");
         this.fetchTasks();
       }, (err: HttpErrorResponse) => {
           showToast("Coś poszło nie tak :(");

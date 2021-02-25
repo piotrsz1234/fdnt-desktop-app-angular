@@ -4,6 +4,8 @@ import { UserInfo } from './login/user';
 import { AuthService } from './auth/auth.service';
 import { GetUser } from './config';
 
+declare let loadMaterializeCss: Function;
+
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
@@ -15,10 +17,9 @@ export class AppComponent implements OnInit {
 	constructor(private router: Router, private auth : AuthService) {
 		router.events.subscribe((ev) => {
 			if (ev instanceof NavigationEnd) {
-				/*
-				if (!auth.isLogged())
-					router.navigateByUrl("/(main:login//sidebar:calendar)");
-					*/
+				setTimeout(loadMaterializeCss, 500);
+				if (GetUser() == undefined || !this.auth.isLogged())
+					router.navigateByUrl("/(main:login)");
 			}
 		});
 	}
@@ -42,7 +43,7 @@ export class AppComponent implements OnInit {
 	}
 
 	getLetter() {
-		if (GetUser() == null) return "--";
+		if (GetUser() == null || !this.auth.isLogged()) return "--";
 		return (GetUser() as UserInfo).email.substr(0, 1).toUpperCase();
 	}
 

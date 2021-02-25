@@ -29,7 +29,6 @@ export class PostComponent implements OnInit {
 
   getDate() {
     let temp = new Date(this.post.publishTime);
-    console.log(temp);
     return getDateString(temp);
   }
 

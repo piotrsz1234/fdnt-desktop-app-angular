@@ -4,6 +4,7 @@ import { CombineUrls, apiUrl, GetUser, getDateString } from '../config';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { UserInfo } from '../login/user';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 declare let showToast: Function;
 declare let closeModal : Function
@@ -18,7 +19,7 @@ export class TasklistsComponent implements OnInit {
   taskLists : TaskList[] = [];
 
   currentlyInEdit: TaskList = new TaskList();
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private router : Router) { }
 
   ngOnInit(): void {
     this.currentlyInEdit.name = "";
@@ -37,8 +38,9 @@ export class TasklistsComponent implements OnInit {
     })
   }
 
-  goToChild(id : number) {
+  goToChild(id: number) {
     localStorage.setItem("tasklist", JSON.stringify(this.taskLists[id]));
+    this.router.navigateByUrl("(main:tasklist)");
   }
 
   formatDateString(tasklist: TaskList) : string {

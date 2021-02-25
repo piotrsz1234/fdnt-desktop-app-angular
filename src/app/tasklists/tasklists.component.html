@@ -2,7 +2,7 @@
 
 <div class="tasklists-field" *ngIf="taskLists.length > 0">
     <div class="line"></div>
-    <a *ngFor="let t of taskLists; index as i" (click)="goToChild(i)" href="/(main:tasklist)"
+    <a *ngFor="let t of taskLists; index as i" (click)="goToChild(i)"
         class="single-tasklist-field">
         <div class="date">{{formatDateString(t)}}</div>
         <p>{{t.name}}</p>
