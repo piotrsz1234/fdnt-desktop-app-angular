@@ -7,7 +7,8 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
 declare let showToast: Function;
-declare let closeModal : Function
+declare let closeModal: Function
+declare let loadMaterializeCss: Function;
 
 @Component({
   selector: 'app-tasklists',
@@ -23,6 +24,7 @@ export class TasklistsComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentlyInEdit.name = "";
+    loadMaterializeCss();
     this.fetchTaskLists();
   }
 

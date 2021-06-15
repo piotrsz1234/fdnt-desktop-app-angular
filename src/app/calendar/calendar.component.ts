@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core'
 import { apiUrl, emptyGuid, GetUser } from '../config'
 import { CombineUrls } from '../config'
 import { UserInfo } from '../login/user'
-import { APICalendarEvent, CategoryCalendarEvent, CalculateColorForHex, CalculateSecondaryColorForHex, AreTheyTheSame, Participation, configureParticipationForRegistrator } from './calendarEvent'
+import { APICalendarEvent, CategoryCalendarEvent, CalculateColorForHex, CalculateSecondaryColorForHex, Participation, configureParticipationForRegistrator } from './calendarEvent'
 import { isSameDay, isSameMonth } from 'date-fns';
 import { TaskList, Declaration } from '../tasklists/tasklist';
 import { Observable, observable } from 'rxjs';
@@ -75,9 +75,6 @@ export class CalendarComponent implements OnInit {
 		}
 	];
 
-	editModalHeader: string = "Edytuj wydarzenie";
-	editModalButtonText: string = "Zapisz zmiany";
-
 	tabs: string[] = [];
 
 	isConfirmed: boolean = false;
@@ -99,21 +96,6 @@ export class CalendarComponent implements OnInit {
 		let temp = JSON.parse(json);
 		if (temp != null) this.tabs = temp;
 		this.update++;
-	}
-
-	activateDamnThing(v: string): void {
-		setTimeout(this.fixPicker, 10, v);
-	}
-
-	fixPicker(name: string): void {
-		let temps = document.getElementsByClassName("modal " + name + " open");
-		if (temps != null && temps.length > 0) {
-			let temp = temps.item(0);
-			if (temp != null) {
-				(temp as HTMLElement).style.setProperty("height", "100%");
-				(temp as HTMLElement).style.setProperty("width", "100%");
-			}
-		}
 	}
 
 	setCategory(id: string) {
@@ -184,24 +166,19 @@ export class CalendarComponent implements OnInit {
 	}
 
 	editEvent(event: CalendarEvent): void {
-		let temp = this.apisEvents.find(x => AreTheyTheSame(x, event));
+		let temp = this.apisEvents[this.events.indexOf(event)];
 		console.log(temp);
-		this.editModalHeader = "Edytuj wydarzenie";
-		this.editModalButtonText = "Zapisz zmiany";
 		if (temp != undefined)
 			this.currentlyInEdit = temp;
 		setDate(this.currentlyInEdit.whenBegins, 0);
 		setTime(this.currentlyInEdit.whenBegins, 0);
 		setDate(this.currentlyInEdit.whenEnds, 1);
 		setTime(this.currentlyInEdit.whenEnds, 1);
-		let selected = this.currentlyInEdit.forWho.split('\n');
-		if (selected[selected.length - 1] == "") selected.pop();
-		this.setValuesInSelect(selected);
 		openModalById("edit-event");
 	}
 
 	watch(event: CalendarEvent): void {
-		let temp = this.apisEvents.find(x => AreTheyTheSame(x, event));
+		let temp = this.apisEvents[this.events.indexOf(event)];
 		this.currentlyInEdit = temp as APICalendarEvent;
 		this.isRegisteredForEvent();
 		setDate(this.currentlyInEdit.whenBegins, 2);
@@ -209,19 +186,6 @@ export class CalendarComponent implements OnInit {
 		setTime(this.currentlyInEdit.whenEnds, 2);
 		setTime(this.currentlyInEdit.whenEnds, 3);
 		openModalById("show-event");
-	}
-
-	setValuesInSelect(array: string[]) {
-		let children = document.getElementsByClassName("dropdown-content select-dropdown multiple-select-dropdown")[0].childNodes;
-		for (let i = 0; i < children.length; i++) {
-			for (let j = 0; j < array.length; j++) {
-				var test = (children[i].childNodes[0].childNodes[0].childNodes[0] as HTMLInputElement);
-				if ((children[i] as HTMLElement).innerHTML.includes(array[j]) && !test.checked)
-					test.click();
-				if ((children[i] as HTMLElement).innerHTML.includes(array[j]) == false && test.checked)
-					test.click();
-			}
-		}
 	}
 	
 	replace(inWHat: string, what: string, forWhat: string): string {
@@ -236,21 +200,9 @@ export class CalendarComponent implements OnInit {
 	}
 
 	removeEvent(event: CalendarEvent): void {
-		let temp = this.apisEvents.find(x => AreTheyTheSame(x, event));
+		let temp = this.apisEvents[this.events.indexOf(event)];
 		this.currentlyInEdit = temp as APICalendarEvent;
 		openModalById("remove-event");
-	}
-
-	indexOfTaskList(array: Array<TaskList>, id: string): number {
-		for (let i = 0; i < array.length; i++)
-			if (array[i].id == id) return i;
-		return -1;
-	}
-
-	indexOfCategory(array: Array<CategoryCalendarEvent>, id: string): number {
-		for (let i = 0; i < array.length; i++)
-			if (array[i].id == id) return i;
-		return -1;
 	}
 
 	deleteEvent(): void {
@@ -293,8 +245,6 @@ export class CalendarComponent implements OnInit {
 
 	addEvent(): void {
 		this.currentlyInEdit = new APICalendarEvent();
-		this.editModalHeader = "Dodaj wydarzenie";
-		this.editModalButtonText = "Dodaj";
 	}
 
 	getDates(): void {
@@ -334,10 +284,9 @@ export class CalendarComponent implements OnInit {
 		this.currentlyInEdit.location = (document.getElementById("event-location") as HTMLInputElement).value;
 	}
 
-	save(): void {
-		this.readDataFromInputs();
-		if (this.currentlyInEdit.id == emptyGuid) {
-			this.http.post<string>(CombineUrls(apiUrl, "Calendar/events"), this.currentlyInEdit)
+	save(val : APICalendarEvent): void {
+		if (val.id == emptyGuid) {
+			this.http.post<string>(CombineUrls(apiUrl, "Calendar/events"), val)
 				.subscribe(x => {
 					showToast("Udało się dodać wydarzenie. Jej!");
 					closeModal(0);
@@ -348,7 +297,7 @@ export class CalendarComponent implements OnInit {
 						showToast("Nie udało się dodać!");
 					})
 		} else {
-			this.http.patch<string>(CombineUrls(apiUrl, "Calendar/events"), this.currentlyInEdit)
+			this.http.patch<string>(CombineUrls(apiUrl, "Calendar/events"), val)
 				.subscribe(x => {
 					showToast("Udało się zedytować wydarzenie. Jej!");
 					closeModal(0);
@@ -356,7 +305,7 @@ export class CalendarComponent implements OnInit {
 				},
 					(error) => {
 						console.log(error);
-						showToast("Nie udało się dodać!");
+						showToast("Nie udało się zapisać zmian!");
 					})
 		}
 	}
@@ -450,6 +399,18 @@ export class CalendarComponent implements OnInit {
 	anyParticipationsChange(t: boolean) {
 		this.anyParticipations = t;
 		this.getButtonStatus(t);
+	}
+
+	indexOfTaskList(array: Array<TaskList>, id: string): number {
+		for (let i = 0; i < array.length; i++)
+			if (array[i].id == id) return i;
+		return -1;
+	}
+
+	indexOfCategory(array: Array<CategoryCalendarEvent>, id: string): number {
+		for (let i = 0; i < array.length; i++)
+			if (array[i].id == id) return i;
+		return -1;
 	}
 
 }

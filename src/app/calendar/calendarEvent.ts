@@ -45,12 +45,6 @@ export function configureParticipationAsInvitation(calendarEvent : APICalendarEv
 	return registration;
 }
 
-export function AreTheyTheSame(event1 :APICalendarEvent, event2 : CalendarEvent) {
-	if(event1.name != event2.title) return false;
-	if(JSON.stringify(event2.start) != JSON.stringify(new Date(event1.whenBegins))) return false;
-	return true;
-}
-
 export class CategoryCalendarEvent {
 	id : string = "";
 	name : string = "";

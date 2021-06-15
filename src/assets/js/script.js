@@ -1,19 +1,24 @@
 if (document.readyState !== 'loading') {
-  loadMaterializeCss();
+  loadFull();
 } else {
   document.addEventListener('DOMContentLoaded', function () {
-    loadMaterializeCss();
+    loadFull();
     checkSelectedPage()
     document.addEventListener('DOMSubtreeModified', function () {
       checkSelectedPage();
     });
   });
 }
+
+function loadFull() {
+  var elems = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(elems);
+  loadMaterializeCss();
+}
+
 function loadMaterializeCss() {
   var elems = document.querySelectorAll('.datepicker');
   var instances = M.Datepicker.init(elems, {});
-  var elems = document.querySelectorAll('.modal');
-  var instances = M.Modal.init(elems);
   var elems = document.querySelectorAll('.timepicker');
   var instances = M.Timepicker.init(elems);
   var elems = document.querySelectorAll('select');
@@ -47,6 +52,7 @@ function openModal(id) {
   if (id == -1) instances[instances.length - 1].open();
   else
     instances[id].open();
+  loadMaterializeCss();
 }
 
 function openModalById(id) {
@@ -81,6 +87,7 @@ function setDate(date, id) {
 }
 
 function setTime(dateS, id) {
+  loadMaterializeCss();
   var elems = document.querySelectorAll('.timepicker');
   let date = new Date(dateS);
   let t = date.getHours() > 12;
@@ -112,6 +119,5 @@ function setMinimumDateForDatePicker() {
 }
 
 function getEventsValue(event) {
-  console.log(event.target.value);
   return event.target.value;
 }

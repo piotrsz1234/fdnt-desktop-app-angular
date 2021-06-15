@@ -17,7 +17,6 @@ export class AppComponent implements OnInit {
 	constructor(private router: Router, private auth : AuthService) {
 		router.events.subscribe((ev) => {
 			if (ev instanceof NavigationEnd) {
-				setTimeout(loadMaterializeCss, 500);
 				if (GetUser() == undefined || !this.auth.isLogged())
 					router.navigateByUrl("/(main:login)");
 			}

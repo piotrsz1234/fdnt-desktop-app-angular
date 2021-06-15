@@ -1,0 +1,67 @@
+<div id="edit-event" class="modal">
+	<p>{{editModalHeader}}</p>
+	<div class="container" id="edit-event-container">
+		<div class="input-field">
+			<input [(ngModel)]="currentlyInEdit.name"
+				id="event-name" type="text" class="validate">
+			<label for="event-name">Nazwa wydarzenia</label>
+		</div>
+		<p>
+			<label>
+				<input checked type="checkbox" class="filled-in" checked="checked" id="for-group" />
+				<span>Czy dla sprecyzowanej grupy?</span>
+			</label>
+		</p>
+		<div class="input-field">
+			<select multiple id="groups">
+				<option *ngFor="let item of tabs; index as i" [value]="i">{{item}}</option>
+			</select>
+			<label for="groups">Grupy</label>
+		</div>
+		<div class="row">
+			<div class="input-field col s6">
+				<input id="begin-date" type="text" class="datepicker" (click)="activateDamnThing('datepicker-modal')">
+				<label for="begin-date">Data początku</label>
+			</div>
+			<div class="input-field col s6">
+				<input id="begin-time" type="text" class="timepicker" (click)="activateDamnThing('timepicker-modal')">
+				<label for="begin-time">Czas początku</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="input-field col s6">
+				<input id="end-date" type="text" class="datepicker" (click)="activateDamnThing('datepicker-modal')">
+				<label for="end-date">Data końca</label>
+			</div>
+			<div class="input-field col s6">
+				<input id="end-time" type="text" class="timepicker" (click)="activateDamnThing('timepicker-modal')">
+				<label for="end-time">Czas końca</label>
+			</div>
+		</div>
+		<div class="input-field">
+			<input [(ngModel)]="currentlyInEdit.location"
+				id="event-location" type="text" class="validate">
+			<label for="event-location">Lokalizacja</label>
+		</div>
+		<div class="input-field">
+			<select id="tasklist"
+				[value]="indexOfTaskList(taskLists, currentlyInEdit.taskListID)">
+				<option disabled selected value="-1">Wybierz listę zadań</option>
+				<option *ngFor="let item of taskLists; index as i" [value]="i">{{item.name}}</option>
+			</select>
+
+		</div>
+
+		<div class="input-field">
+			<select id="category">
+				[value]="indexOfCategory(categories, currentlyInEdit.category)">
+				<option disabled selected value="-1">Wybierz kategorię</option>
+				<option *ngFor="let item of categories; index as i" [value]="i">{{item.name}}</option>
+			</select>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="waves-effect waves-green btn-flat" onclick="closeModal(0)">Anuluj</button>
+		<button class="waves-effect waves-green btn-flat" (click)="save()">{{editModalButtonText}}</button>
+	</div>
+</div>

@@ -26,6 +26,7 @@ import { EditTasklistComponent } from './tasklists/tasklist/edit-tasklist/edit-t
 import { EditTasklistsComponent } from './tasklists/edit-tasklists/edit-tasklists.component';
 import { RegistrationsComponent } from './calendar/registrations/registrations.component';
 import { DisplayPostsComponent } from './news/display-posts/display-posts.component';
+import { EditEventComponent } from './calendar/edit-event/edit-event.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,7 @@ import { DisplayPostsComponent } from './news/display-posts/display-posts.compon
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
     AngularEditorModule,
-    FormsModule
+    FormsModule,
   ],
   declarations: [
     AppComponent,
@@ -69,7 +70,8 @@ import { DisplayPostsComponent } from './news/display-posts/display-posts.compon
     EditTasklistComponent,
     EditTasklistsComponent,
     RegistrationsComponent,
-    DisplayPostsComponent
+    DisplayPostsComponent,
+    EditEventComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

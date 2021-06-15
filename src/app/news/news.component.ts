@@ -1,14 +1,10 @@
 import { Component, OnInit, Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Post } from './post';
-import { CombineUrls, apiUrl, GetUser, emptyGuid } from '../config';
+import { CombineUrls, apiUrl } from '../config';
 import { UserInfo } from '../login/user';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 
-declare let openModal : Function;
-declare let showToast : Function;
-declare let closeModal : Function;
-declare let selectValues : Function;
+declare let loadMaterializeCss : Function;
 
 @Component({
   selector: 'app-news',
@@ -52,6 +48,7 @@ export class NewsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchPosts();
+    loadMaterializeCss();
     this.tabs = JSON.parse(localStorage.getItem("tabs") as string) as string[];
   }
 
