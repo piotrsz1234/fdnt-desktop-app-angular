@@ -1,0 +1,75 @@
+<h1 mat-dialog-title>Wydarzenie</h1>
+<mat-dialog-content>
+    <form>
+        <mat-grid-list cols="2" rows="7" rowHeight="100px">
+            <mat-grid-tile [colspan]="2">
+                <mat-form-field>
+                    <mat-label>Nazwa wydarzenia</mat-label>
+                    <input matInput disabled [value]="currentlyInEdit.name" />
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile [colspan]="2">
+                <mat-form-field>
+                    <mat-label>Grupy</mat-label>
+                    <mat-chip-list aria-label="Grupy">
+                        <mat-chip
+                            *ngFor="let item of currentlyInEdit.forWho.substr(0, currentlyInEdit.forWho.length).split('\n'); index as i">
+                            {{item}}
+                        </mat-chip>
+                    </mat-chip-list>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <mat-form-field>
+                    <input matInput type="datetime-local" placeholder="Data i czas początku" disabled
+                        [value]="whenBegins">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field>
+                    <input matInput type="datetime-local" placeholder="Data i czas końca" disabled [value]="whenEnds">
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile [colspan]="2">
+                <mat-form-field>
+                    <mat-label>Lokalizacja</mat-label>
+                    <input matInput disabled [value]="currentlyInEdit.location" />
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile [colspan]="2">
+                <!--<div class="input-field">
+				<select id="show-tasklist" disabled class="browser-default"
+					[value]="indexOfTaskList(taskLists, currentlyInEdit.taskListID)">
+					<option disabled selected>Wybierz listę zadań</option>
+					<option *ngFor="let item of taskLists; index as i" [value]="i">{{item.name}}</option>
+				</select>
+
+			</div>-->
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="2">
+                <!--<div class="input-field">
+				<select id="show-category" disabled class="browser-default"
+					[value]="indexOfCategory(categories, currentlyInEdit.category)">
+					<option *ngFor="let item of categories; index as i" [value]="i">{{item.name}}</option>
+				</select>
+            </div>-->
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="2">
+                <mat-form-field>
+                    <mat-label>Status rejestracji</mat-label>
+                    <input matInput disabled />
+                </mat-form-field>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button class="btn btn-flat" onclick="closeModalById('show-event')">Anuluj</button>
+    <button class="btn btn-flat" *ngIf="!isRegistered()" (click)="registerForEvent()">Zarejestruj</button>
+		<button class="btn btn-flat" *ngIf="isRegistered()" (click)="removeRegistrationForEvent()">Usuń rejestrację</button>
+</mat-dialog-actions>

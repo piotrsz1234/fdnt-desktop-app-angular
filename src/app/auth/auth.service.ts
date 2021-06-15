@@ -64,6 +64,15 @@ export class AuthService {
 		return this.afAuth.signOut();
 	}
 
+	getTabs(): string[] {
+		let json = localStorage.getItem("tabs");
+		if (json == null) return new Array<string>();
+		let temp = JSON.parse(json);
+		if (temp != null)
+			return temp as string[];
+		else return new Array<string>();
+	}
+
 	removeDot(s: string): string {
 		let output = "";
 		for (let i = 0; i < s.length; i++)

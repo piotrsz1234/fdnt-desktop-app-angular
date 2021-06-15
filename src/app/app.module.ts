@@ -27,6 +27,13 @@ import { EditTasklistsComponent } from './tasklists/edit-tasklists/edit-tasklist
 import { RegistrationsComponent } from './calendar/registrations/registrations.component';
 import { DisplayPostsComponent } from './news/display-posts/display-posts.component';
 import { EditEventComponent } from './calendar/edit-event/edit-event.component';
+import { DisplayEventComponent } from './calendar/display-event/display-event.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonModule } from '@angular/material/button'
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
   imports: [
@@ -54,6 +61,12 @@ import { EditEventComponent } from './calendar/edit-event/edit-event.component';
     AngularFireAuthModule,
     AngularEditorModule,
     FormsModule,
+    MatDialogModule,
+    MatInputModule,
+    MatChipsModule,
+    MatButtonModule,
+    MatGridListModule,
+    MatSelectModule
   ],
   declarations: [
     AppComponent,
@@ -71,9 +84,14 @@ import { EditEventComponent } from './calendar/edit-event/edit-event.component';
     EditTasklistsComponent,
     RegistrationsComponent,
     DisplayPostsComponent,
-    EditEventComponent
+    EditEventComponent,
+    DisplayEventComponent,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    DisplayEventComponent,
+    CalendarComponent
+  ]
 })
 export class AppModule { }

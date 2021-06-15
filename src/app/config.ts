@@ -58,4 +58,19 @@ export function FirstOrDefault<T>(array: Array<T>, func: (f: T) => boolean) {
     return undefined;
 }
 
+export function formatDate(date: Date): string {
+    let output = "";
+    output += date.getFullYear();
+    let days = date.getDate();
+    let month = date.getMonth();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    output += "-" + ((month > 9) ? month.toString() : "0" + month.toString()) + "-";
+    output += ((days > 9) ? days.toString() : "0" + days.toString()) + "T";
+    output += ((hours < 9) ? "0" : "") + hours.toString() + ":";
+    output += ((minutes < 9) ? "0" : "") + minutes.toString();
+    console.log(output);
+    return output;
+  }
+
 export var emptyGuid = "00000000-0000-0000-0000-000000000000";

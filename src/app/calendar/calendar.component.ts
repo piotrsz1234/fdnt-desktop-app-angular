@@ -8,7 +8,8 @@ import { UserInfo } from '../login/user'
 import { APICalendarEvent, CategoryCalendarEvent, CalculateColorForHex, CalculateSecondaryColorForHex, Participation, configureParticipationForRegistrator } from './calendarEvent'
 import { isSameDay, isSameMonth } from 'date-fns';
 import { TaskList, Declaration } from '../tasklists/tasklist';
-import { Observable, observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog'
+import { DisplayEventComponent } from './display-event/display-event.component';
 
 declare let openModal: Function;
 declare let openModalById: Function;
@@ -83,7 +84,7 @@ export class CalendarComponent implements OnInit {
 
 	anyParticipations: boolean = false;
 
-	constructor(private http: HttpClient) {
+	constructor(private http: HttpClient, public dialog : MatDialog) {
 	}
 
 	async ngOnInit() {
@@ -180,12 +181,11 @@ export class CalendarComponent implements OnInit {
 	watch(event: CalendarEvent): void {
 		let temp = this.apisEvents[this.events.indexOf(event)];
 		this.currentlyInEdit = temp as APICalendarEvent;
-		this.isRegisteredForEvent();
-		setDate(this.currentlyInEdit.whenBegins, 2);
-		setDate(this.currentlyInEdit.whenBegins, 3);
-		setTime(this.currentlyInEdit.whenEnds, 2);
-		setTime(this.currentlyInEdit.whenEnds, 3);
-		openModalById("show-event");
+		const dialogRef = this.dialog.open(DisplayEventComponent, {
+			data: this.currentlyInEdit,
+			width: '500px'
+		});
+		//openModalById("show-event");
 	}
 	
 	replace(inWHat: string, what: string, forWhat: string): string {
@@ -202,6 +202,7 @@ export class CalendarComponent implements OnInit {
 	removeEvent(event: CalendarEvent): void {
 		let temp = this.apisEvents[this.events.indexOf(event)];
 		this.currentlyInEdit = temp as APICalendarEvent;
+		
 		openModalById("remove-event");
 	}
 
