@@ -41,22 +41,16 @@
             </mat-grid-tile>
 
             <mat-grid-tile [colspan]="2">
-                <!--<div class="input-field">
-				<select id="show-tasklist" disabled class="browser-default"
-					[value]="indexOfTaskList(taskLists, currentlyInEdit.taskListID)">
-					<option disabled selected>Wybierz listę zadań</option>
-					<option *ngFor="let item of taskLists; index as i" [value]="i">{{item.name}}</option>
-				</select>
-
-			</div>-->
+                <mat-form-field>
+                    <mat-label>Lista zadań</mat-label>
+                    <input matInput disabled [value]="currentlyInEdit.taskListID" />
+                </mat-form-field>
             </mat-grid-tile>
             <mat-grid-tile [colspan]="2">
-                <!--<div class="input-field">
-				<select id="show-category" disabled class="browser-default"
-					[value]="indexOfCategory(categories, currentlyInEdit.category)">
-					<option *ngFor="let item of categories; index as i" [value]="i">{{item.name}}</option>
-				</select>
-            </div>-->
+                <mat-form-field>
+                    <mat-label>Kategoria</mat-label>
+                    <input matInput disabled [value]="getCategoryName()" />
+                </mat-form-field>
             </mat-grid-tile>
             <mat-grid-tile [colspan]="2">
                 <mat-form-field>
@@ -71,5 +65,7 @@
 <mat-dialog-actions>
     <button class="btn btn-flat" onclick="closeModalById('show-event')">Anuluj</button>
     <button class="btn btn-flat" *ngIf="!isRegistered()" (click)="registerForEvent()">Zarejestruj</button>
-		<button class="btn btn-flat" *ngIf="isRegistered()" (click)="removeRegistrationForEvent()">Usuń rejestrację</button>
+    <button class="btn btn-flat" *ngIf="isRegistered() && !isItInvitation()" (click)="removeRegistrationForEvent()">Usuń rejestrację</button>
+    <button class="btn btn-flat" *ngIf="isRegistered() && isItInvitation()" (click)="removeRegistrationForEvent()">Odrzuć zaproszenie</button>
+    <button class="btn btn-flat" *ngIf="isRegistered() && isItInvitation()" (click)="acceptInvitation()">Zaakceptuj zaproszenie</button>
 </mat-dialog-actions>

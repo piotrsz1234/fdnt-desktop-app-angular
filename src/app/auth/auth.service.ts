@@ -10,6 +10,7 @@ import { UserInfo } from '../login/user';
 })
 export class AuthService {
 	user: firebase.User = JSON.parse("{}");
+	
 	constructor(public afAuth: AngularFireAuth, database: AngularFireDatabase, router: Router) {
 		this.afAuth.authState.subscribe(user => {
 			if (user) {
@@ -71,6 +72,12 @@ export class AuthService {
 		if (temp != null)
 			return temp as string[];
 		else return new Array<string>();
+	}
+
+	getUser(): UserInfo {
+		let temp = localStorage.getItem("user");
+		if (temp == null) return new UserInfo();
+		return JSON.parse(temp) as UserInfo;
 	}
 
 	removeDot(s: string): string {
